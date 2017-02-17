@@ -13,6 +13,7 @@ export default class DateBodyItemFilter extends Component {
     this.handleInputBlur = this.handleInputBlur.bind(this)
     this.handleContainerMouseDown = this.handleContainerMouseDown.bind(this)
     this.handleClearInputClick = this.handleClearInputClick.bind(this)
+    this.handleInputKeyDown = this.handleInputKeyDown.bind(this)
   }
 
   static propTypes = {
@@ -99,6 +100,12 @@ export default class DateBodyItemFilter extends Component {
         value: '',
       },
       this.props.changeEqualsDate(''))
+  }
+
+  handleInputKeyDown(e) {
+    if (e.keyCode === 13 && this.state.value !== '') {
+      this.props.filterData()
+    }
   }
 
   render() {

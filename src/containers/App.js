@@ -44,13 +44,8 @@ export default class App extends Component {
 
   render() {
     const {
-      dateFilter,
       filterItems,
     } = this.state
-    // dateFilter === '' || !applyFilter ?
-    //   items.items
-    //   :
-    console.log(dateFilter, filterItems)
     return (
       <div>
         <FilterPanel
