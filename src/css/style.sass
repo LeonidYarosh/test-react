@@ -1,0 +1,85 @@
+body
+  background: white
+  margin: 0
+  overflow: hidden
+  .filter-panel
+    width: 240px
+    float: left
+    height: 100vh
+    background: #F5F7F9
+    overflow-y: auto
+  .content
+    width: calc(100vw - 240px)
+    float: left
+    height: 100vh
+.item-filter
+  position: relative
+  width: 240px
+  height: 20px
+  border-bottom: 2px solid #c4c4c4
+  font-size: 14px
+  padding: 15px 0
+  cursor: pointer
+  p
+    float: left
+    margin: 0
+    position: relative
+    top: 3px
+    left: 14px
+.arrow-filter
+  width: 8px
+  height: 8px
+  border-top: 2px solid #bdbdbd
+  border-right: 2px solid #bdbdbd
+  float: left
+  transform: rotate(45deg)
+  transition: all 0.2s
+  top: 5px
+  left: 4px
+  position: relative
+.arrow-open
+  transform: rotate(135deg)
+  color: gray
+  top: 3px
+  left: 6px
+.reset-filter
+  float: right
+  position: relative
+  right: 8px
+  display: none
+.body-item-filter
+  display: none
+  transition: all 0.2s
+  position: relative
+.calendar-box
+  position: absolute
+  z-index: 9
+  width: 230px
+  margin-left: 5px
+  background: white
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .15)
+.input-date
+  display: block
+  margin: 0 auto
+.date-picker-filter
+  position: relative
+  height: 264px
+  display: block
+.apply-button
+  position: fixed
+  bottom: 30px
+  left: 95px
+  display: none
+  z-index: 10
+.show-block
+  display: block
+.delete-input-filter
+  cursor: pointer
+  width: 10px
+  height: 10px
+  position: absolute
+  top: 2px
+  right: 42px
+.ReactVirtualized__Table__row
+  padding: 0!important
+
