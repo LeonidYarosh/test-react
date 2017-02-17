@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import moment from 'moment'
 import DayPicker, {DateUtils} from 'react-day-picker'
+import SwitchConditionFilterDate from './SwitchConditionFilterDate'
 import 'react-day-picker/lib/style.css'
 
 export default class DateBodyItemFilter extends Component {
@@ -80,7 +81,7 @@ export default class DateBodyItemFilter extends Component {
     }
     else {
       this.setState({value, selectedDay: null},
-      this.props.changeEqualsDate(''))
+        this.props.changeEqualsDate(''))
     }
   }
 
@@ -111,23 +112,26 @@ export default class DateBodyItemFilter extends Component {
   render() {
     return (
       <div onMouseDown={ this.handleContainerMouseDown }>
-        <input
-          type="text"
-          ref={ (el) => {
-            this.input = el
-          } }
-          placeholder="DD/MM/YYYY"
-          value={ this.state.value }
-          onChange={ this.handleInputChange }
-          onFocus={ this.handleInputFocus }
-          onBlur={ this.handleInputBlur }
-          className="input-date"
-          onKeyDown={this.handleInputKeyDown}
-        />
-        <div
-          className="delete-input-filter"
-          onClick={this.handleClearInputClick}
-        >&#10006;</div>
+        <SwitchConditionFilterDate />
+        <div className="input-and-clear-filter">
+          <input
+            type="text"
+            ref={ (el) => {
+              this.input = el
+            } }
+            placeholder="DD/MM/YYYY"
+            value={ this.state.value }
+            onChange={ this.handleInputChange }
+            onFocus={ this.handleInputFocus }
+            onBlur={ this.handleInputBlur }
+            className="input-date"
+            onKeyDown={this.handleInputKeyDown}
+          />
+          <div
+            className="delete-input-filter"
+            onClick={this.handleClearInputClick}
+          >&#10006;</div>
+        </div>
         { this.state.showOverlay &&
         <div className="date-picker-filter">
           <div className="calendar-box">
