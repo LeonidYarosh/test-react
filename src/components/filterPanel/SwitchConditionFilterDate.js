@@ -1,41 +1,29 @@
 import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
 
-const condition = [
-  'equals',
-  'before',
-  'after',
-  'between',
-]
-
 export default class SwitchConditionFilterDate extends Component {
 
-  static propTypes = {}
-  // Переписать вверху
-  state = {
-    active: 'equals',
-  }
-
-  handleClickCondition = (item) => {
-    this.setState({
-      active: item,
-    })
+  static propTypes = {
+    condition: PropTypes.array.isRequired,
+    handleChangeCondition: PropTypes.func,
+    activeConditionDate: PropTypes.string,
   }
 
   render() {
     const {
-      active,
-    } = this.state
-
+      condition,
+      handleChangeCondition,
+      activeConditionDate,
+    } = this.props
     return (
       <div className="condition-filter-date">
         <p>Condition:</p>
         {
           condition.map((item, i) => {
             return <div
-              className={cx({'active-condition': item === active}, 'item-condition')}
+              className={cx({'active-condition': item === activeConditionDate}, 'item-condition')}
               key={i}
-              onClick={ () => this.handleClickCondition(item) }
+              onClick={ () => handleChangeCondition(item) }
             >
               {item}
             </div>

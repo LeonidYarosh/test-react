@@ -20,6 +20,9 @@ export default class DateBodyItemFilter extends Component {
   static propTypes = {
     changeEqualsDate: PropTypes.func.isRequired,
     filterData: PropTypes.func.isRequired,
+    condition: PropTypes.array.isRequired,
+    handleChangeCondition: PropTypes.func,
+    activeConditionDate: PropTypes.string,
   }
 
   state = {
@@ -112,7 +115,11 @@ export default class DateBodyItemFilter extends Component {
   render() {
     return (
       <div onMouseDown={ this.handleContainerMouseDown }>
-        <SwitchConditionFilterDate />
+        <SwitchConditionFilterDate
+          condition={this.props.condition}
+          handleChangeCondition={this.props.handleChangeCondition}
+          activeConditionDate={this.props.activeConditionDate}
+        />
         <div className="input-and-clear-filter">
           <input
             type="text"
@@ -124,7 +131,7 @@ export default class DateBodyItemFilter extends Component {
             onChange={ this.handleInputChange }
             onFocus={ this.handleInputFocus }
             onBlur={ this.handleInputBlur }
-            className="input-date"
+            className="input-date-first"
             onKeyDown={this.handleInputKeyDown}
           />
           <div

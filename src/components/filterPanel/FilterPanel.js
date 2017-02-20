@@ -24,6 +24,9 @@ export default class FilterPanel extends Component {
     changeEqualsDate: PropTypes.func.isRequired,
     changeFilter: PropTypes.bool,
     filterData: PropTypes.func,
+    condition: PropTypes.array.isRequired,
+    handleChangeCondition: PropTypes.func,
+    activeConditionDate: PropTypes.string,
   }
 
   dateItemFilter = (caption) => {
