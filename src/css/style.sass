@@ -58,9 +58,13 @@ body
   margin-left: 5px
   background: white
   box-shadow: 0 2px 5px rgba(0, 0, 0, .15)
-input-date-first
+.input-date
   display: block
   margin: 0 auto
+.input-date-between
+  display: inline-block
+  width: 100px
+  margin-left: 6px
 .date-picker-filter
   position: relative
   height: 264px
@@ -73,13 +77,17 @@ input-date-first
   z-index: 10
 .show-block
   display: block
+.hide-block
+  display: none
 .delete-input-filter
   cursor: pointer
   width: 10px
   height: 10px
   position: absolute
-  top: 2px
+  top: 8px
   right: 42px
+.delete-input-filter-between
+  right: 6px
 .ReactVirtualized__Table__row
   padding: 0!important
 .input-and-clear-filter
@@ -103,3 +111,37 @@ input-date-first
   margin-top: 12px
   margin-bottom: 12px
 
+.Range
+  .DayPicker-Day
+    outline: none
+  .DayPicker-Day--disabled
+    background-color: white
+    color: lightgray
+  .DayPicker-Day:not(.DayPicker-Day--outside):not(.DayPicker-Day--selected):hover
+    background-color: #EAEAEA
+    color: #555
+
+.DayPicker-Day--start, .DayPicker-Day--end
+  position: relative
+
+.DayPicker-Day--start:not(.DayPicker-Day--outside):before
+  position: absolute
+  top: 0
+  bottom: 0
+  left: -5px
+  width: 5px
+  content: ''
+  background-color: yellowgreen
+  border-top-left-radius: 10px
+  border-bottom-left-radius: 10px
+
+.DayPicker-Day--end:not(.DayPicker-Day--outside):after
+  position: absolute
+  top: 0
+  bottom: 0
+  right: -5px
+  width: 5px
+  content: ''
+  background-color: yellowgreen
+  border-top-right-radius: 10px
+  border-bottom-right-radius: 10px

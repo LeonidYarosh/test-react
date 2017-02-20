@@ -16,6 +16,8 @@ export default class App extends Component {
 
   state = {
     dateFilter: '',
+    fromDateFilter: '',
+    toDateFilter: '',
     changeFilter: false,
     filterItems: items.items,
     applyFilter: false,
@@ -52,6 +54,17 @@ export default class App extends Component {
     })
   }
 
+  betweenFilterDate = () => {
+    const selectFromDay = moment(this.state.fromDateFilter).format('L')
+    const selectToDay = moment(this.state.toDateFilter).format('L')
+    return items.items.filter(item => {
+      const dayItem = moment(item['Date Submitted']).format('L')
+      if (moment(dayItem).isBetween(selectFromDay, selectToDay)) {
+        return item
+      }
+    })
+  }
+
   switchFunctionConditionFilterDate = () => {
     switch (this.state.activeConditionDate) {
       case 'equals': {
@@ -64,7 +77,7 @@ export default class App extends Component {
         return this.afterFilterDate()
       }
       case 'between': {
-        break
+        return this.betweenFilterDate()
       }
       default: {
         this.setState({setingsFilterDate: this.equalsSetingsFilter})
@@ -94,6 +107,36 @@ export default class App extends Component {
       })
   }
 
+  changeBetweenFromDate = (fromDateFilter) => {
+    fromDateFilter === '' ?
+      this.setState({
+        fromDateFilter,
+        changeFilter: false,
+        filterItems: items.items,
+        applyFilter: false,
+      }) :
+      this.setState({
+        fromDateFilter,
+        changeFilter: true,
+        applyFilter: true,
+      })
+  }
+
+  changeBetweenToDate = (toDateFilter) => {
+    toDateFilter === '' ?
+      this.setState({
+        toDateFilter,
+        changeFilter: false,
+        filterItems: items.items,
+        applyFilter: false,
+      }) :
+      this.setState({
+        toDateFilter,
+        changeFilter: true,
+        applyFilter: true,
+      })
+  }
+
   filterData = () => {
     const filterItems = this.switchFunctionConditionFilterDate()
     this.setState({
@@ -116,6 +159,8 @@ export default class App extends Component {
           condition={condition}
           handleChangeCondition={this.handleChangeCondition}
           activeConditionDate={this.state.activeConditionDate}
+          changeBetweenFromDate={this.changeBetweenFromDate}
+          changeBetweenToDate={this.changeBetweenToDate}
         />
         <Content
           fields={fields.fields}
