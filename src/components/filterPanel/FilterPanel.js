@@ -28,6 +28,7 @@ export default class FilterPanel extends Component {
     condition: PropTypes.array.isRequired,
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
+    correctDateInput: PropTypes.bool,
   }
 
   dateItemFilter = (caption) => {
@@ -62,6 +63,7 @@ export default class FilterPanel extends Component {
           <ApplyFilter
             changeFilter={this.props.changeFilter}
             filterData={this.props.filterData}
+            correctDateInput = {this.props.correctDateInput}
           />
         </div>
       </Scrollbars>

@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import moment from 'moment'
 import cx from 'classnames'
 
 export default class ApplyFilter extends Component {
@@ -6,6 +7,7 @@ export default class ApplyFilter extends Component {
   static propTypes = {
     changeFilter: PropTypes.bool,
     filterData: PropTypes.func,
+    correctDateInput: PropTypes.bool,
   }
 
   render() {

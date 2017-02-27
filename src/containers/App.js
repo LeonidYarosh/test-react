@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import FilterPanel from '../components/filterPanel/FilterPanel'
 import Content from '../components/Content'
+import itemsMock from '../mock/items.json'
 import fields from '../mock/fields.json'
 import {formatingItems} from '../util/formatingDataContent'
 import moment from 'moment'
@@ -21,15 +22,14 @@ export default class App extends Component {
     changeFilter: false,
     items: [],
     filterItems: [],
-    applyFilter: false,
     activeConditionDate: 'equals',
     setingsFilterDate: this.equalsSetingsFilter,
   }
 
   reloadData = () => {
-    const items = formatingItems()
+    const items = formatingItems(itemsMock)
     this.setState({
-      items: items,
+      items,
       filterItems: items,
     })
   }
@@ -40,10 +40,7 @@ export default class App extends Component {
 
   equalsFilterDate = () => {
     return this.state.items.filter(item => {
-      if (moment(item['Date Submitted']).format('L')
-        === moment(this.state.dateFilter).format('L')) {
-        return item
-      }
+      return moment(item['Date Submitted']).format('L') === moment(this.state.dateFilter).format('L')
     })
   }
 
@@ -51,9 +48,7 @@ export default class App extends Component {
     const selectDay = moment(this.state.dateFilter).format('L')
     return this.state.items.filter(item => {
       const dayItem = moment(item['Date Submitted']).format('L')
-      if (moment(dayItem).isBefore(selectDay)) {
-        return item
-      }
+      return moment(dayItem).isBefore(selectDay)
     })
   }
 
@@ -61,9 +56,7 @@ export default class App extends Component {
     const selectDay = moment(this.state.dateFilter).format('L')
     return this.state.items.filter(item => {
       const dayItem = moment(item['Date Submitted']).format('L')
-      if (moment(dayItem).isAfter(selectDay)) {
-        return item
-      }
+      return moment(dayItem).isAfter(selectDay)
     })
   }
 
@@ -72,9 +65,7 @@ export default class App extends Component {
     const selectToDay = moment(this.state.toDateFilter).format('L')
     return this.state.items.filter(item => {
       const dayItem = moment(item['Date Submitted']).format('L')
-      if (moment(dayItem).isBetween(selectFromDay, selectToDay)) {
-        return item
-      }
+      return moment(dayItem).isBetween(selectFromDay, selectToDay)
     })
   }
 
@@ -93,87 +84,95 @@ export default class App extends Component {
         return this.betweenFilterDate()
       }
       default: {
-        this.setState({setingsFilterDate: this.equalsSetingsFilter})
-        break
+        return this.equalsFilterDate()
       }
+    }
+  }
+
+  checkValidDate = (item) => {
+    if (moment(this.state.dateFilter).isValid() && item !== 'between') {
+      this.setState({
+        changeFilter: true,
+      })
+    }
+    if (item === 'between') {
+      this.setState({
+        changeFilter: false,
+      })
     }
   }
 
   handleChangeCondition = (item) => {
     this.setState({
       activeConditionDate: item,
-    })
+    }, this.checkValidDate(item))
   }
 
   changeEqualsDate = (dateFilter) => {
-    dateFilter === '' ?
-      this.setState({
-        dateFilter,
-        changeFilter: false,
-        filterItems: this.state.items,
-        applyFilter: false,
-      }) :
-      this.setState({
-        dateFilter,
-        changeFilter: true,
-        applyFilter: true,
-      })
+    const newState = dateFilter === '' ? {
+      dateFilter,
+      changeFilter: false,
+      filterItems: this.state.items,
+    } : {
+      dateFilter,
+      changeFilter: true,
+    }
+    this.setState(newState)
   }
 
   changeBetweenFromDate = (fromDateFilter) => {
-    fromDateFilter === '' ?
-      this.setState({
-        fromDateFilter,
-        changeFilter: false,
-        filterItems: this.state.items,
-        applyFilter: false,
-      }) :
-      this.setState({
-        fromDateFilter,
-        changeFilter: true,
-        applyFilter: true,
-      })
+    const newState = fromDateFilter === '' ? {
+      fromDateFilter,
+      changeFilter: false,
+      filterItems: this.state.items,
+    } :
+    {
+      fromDateFilter,
+      changeFilter: true,
+    }
+    this.setState(newState)
   }
 
   changeBetweenToDate = (toDateFilter) => {
-    toDateFilter === '' ?
-      this.setState({
-        toDateFilter,
-        changeFilter: false,
-        filterItems: this.state.items,
-        applyFilter: false,
-      }) :
-      this.setState({
-        toDateFilter,
-        changeFilter: true,
-        applyFilter: true,
-      })
+    const newState = toDateFilter === '' ? {
+      toDateFilter,
+      changeFilter: false,
+      filterItems: this.state.items,
+    } : {
+      toDateFilter,
+      changeFilter: true,
+    }
+    this.setState(newState)
   }
 
   filterData = () => {
     const filterItems = this.switchFunctionConditionFilterDate()
     this.setState({
       filterItems,
-      applyFilter: true,
+      changeFilter: false,
     })
   }
 
   render() {
     const {
       filterItems,
+      dateFilter,
+      activeConditionDate,
+      changeFilter,
     } = this.state
     return (
       <div>
         <FilterPanel
           fields={fields.fields}
           changeEqualsDate={this.changeEqualsDate}
-          changeFilter={this.state.changeFilter}
+          changeFilter={changeFilter}
           filterData={this.filterData}
           condition={condition}
           handleChangeCondition={this.handleChangeCondition}
-          activeConditionDate={this.state.activeConditionDate}
+          activeConditionDate={activeConditionDate}
           changeBetweenFromDate={this.changeBetweenFromDate}
           changeBetweenToDate={this.changeBetweenToDate}
+          correctDateInput={moment(dateFilter, 'L', true).isValid()}
         />
         <Content
           fields={fields.fields}

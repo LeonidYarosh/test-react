@@ -29,9 +29,8 @@ module.exports = {
         loader: 'json',
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
-        loader: 'file',
-        exclude: '/src/',
+        test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        loader: 'file-loader',
       },
     ],
   },
