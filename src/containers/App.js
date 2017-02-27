@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import FilterPanel from '../components/filterPanel/FilterPanel'
 import Content from '../components/Content'
 import fields from '../mock/fields.json'
-import items from '../mock/items.json'
+import {formatingItems} from '../util/formatingDataContent'
 import moment from 'moment'
 
 const condition = [
@@ -19,14 +19,27 @@ export default class App extends Component {
     fromDateFilter: '',
     toDateFilter: '',
     changeFilter: false,
-    filterItems: items.items,
+    items: [],
+    filterItems: [],
     applyFilter: false,
     activeConditionDate: 'equals',
     setingsFilterDate: this.equalsSetingsFilter,
   }
 
+  reloadData = () => {
+    const items = formatingItems()
+    this.setState({
+      items: items,
+      filterItems: items,
+    })
+  }
+
+  componentDidMount() {
+    this.reloadData()
+  }
+
   equalsFilterDate = () => {
-    return items.items.filter(item => {
+    return this.state.items.filter(item => {
       if (moment(item['Date Submitted']).format('L')
         === moment(this.state.dateFilter).format('L')) {
         return item
@@ -36,7 +49,7 @@ export default class App extends Component {
 
   beforeFilterDate = () => {
     const selectDay = moment(this.state.dateFilter).format('L')
-    return items.items.filter(item => {
+    return this.state.items.filter(item => {
       const dayItem = moment(item['Date Submitted']).format('L')
       if (moment(dayItem).isBefore(selectDay)) {
         return item
@@ -46,7 +59,7 @@ export default class App extends Component {
 
   afterFilterDate = () => {
     const selectDay = moment(this.state.dateFilter).format('L')
-    return items.items.filter(item => {
+    return this.state.items.filter(item => {
       const dayItem = moment(item['Date Submitted']).format('L')
       if (moment(dayItem).isAfter(selectDay)) {
         return item
@@ -57,7 +70,7 @@ export default class App extends Component {
   betweenFilterDate = () => {
     const selectFromDay = moment(this.state.fromDateFilter).format('L')
     const selectToDay = moment(this.state.toDateFilter).format('L')
-    return items.items.filter(item => {
+    return this.state.items.filter(item => {
       const dayItem = moment(item['Date Submitted']).format('L')
       if (moment(dayItem).isBetween(selectFromDay, selectToDay)) {
         return item
@@ -97,7 +110,7 @@ export default class App extends Component {
       this.setState({
         dateFilter,
         changeFilter: false,
-        filterItems: items.items,
+        filterItems: this.state.items,
         applyFilter: false,
       }) :
       this.setState({
@@ -112,7 +125,7 @@ export default class App extends Component {
       this.setState({
         fromDateFilter,
         changeFilter: false,
-        filterItems: items.items,
+        filterItems: this.state.items,
         applyFilter: false,
       }) :
       this.setState({
@@ -127,7 +140,7 @@ export default class App extends Component {
       this.setState({
         toDateFilter,
         changeFilter: false,
-        filterItems: items.items,
+        filterItems: this.state.items,
         applyFilter: false,
       }) :
       this.setState({

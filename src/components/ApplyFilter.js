@@ -10,12 +10,14 @@ export default class ApplyFilter extends Component {
 
   render() {
     return (
-      <button
-        className={cx({'show-block': this.props.changeFilter}, 'apply-button')}
-        onClick={this.props.filterData}
-      >
-        Apply
-      </button>
+      <div className={cx({'show-block': this.props.changeFilter}, 'apply-button-box')}>
+        <button
+          className="apply-button"
+          onClick={this.props.filterData}
+        >
+          Apply
+        </button>
+      </div>
     )
   }
 }

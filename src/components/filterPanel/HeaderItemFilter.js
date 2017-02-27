@@ -17,7 +17,7 @@ export default class HeaderItemFilter extends Component {
     } = this.props
     return (
       <div
-        className="item-filter"
+        className={cx({'active-item-filter': this.props.openedItemFilter}, 'item-filter')}
         onClick={openItemFilter}
       >
         <div className={cx({ 'arrow-open': openedItemFilter}, 'arrow-filter')}></div>

@@ -17,6 +17,7 @@
     "moment": "^2.17.1",
     "react": "^15.4.2",
     "react-addons-shallow-compare": "^15.4.2",
+    "react-custom-scrollbars": "^4.0.2",
     "react-date-picker": "^5.3.28",
     "react-day-picker": "^5.0.0",
     "react-dom": "^15.4.2",

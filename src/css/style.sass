@@ -1,3 +1,5 @@
+*
+  outline: none
 body
   background: white
   margin: 0
@@ -6,12 +8,13 @@ body
     width: 240px
     float: left
     height: 100vh
-    background: #F5F7F9
-    overflow-y: auto
   .content
     width: calc(100vw - 240px)
     float: left
     height: 100vh
+.scroll-box
+  height: 100vh !important
+  float: left
 .item-filter
   position: relative
   width: 240px
@@ -20,12 +23,15 @@ body
   font-size: 14px
   padding: 15px 0
   cursor: pointer
+  background: #F5F7F9
   p
     float: left
     margin: 0
     position: relative
     top: 3px
     left: 14px
+.active-item-filter
+  border: none
 .arrow-filter
   width: 8px
   height: 8px
@@ -39,7 +45,7 @@ body
   position: relative
 .arrow-open
   transform: rotate(135deg)
-  color: gray
+  border-color: #495368
   top: 3px
   left: 6px
 .reset-filter
@@ -51,30 +57,70 @@ body
   display: none
   transition: all 0.2s
   position: relative
+  background: #f5f7f9
 .calendar-box
   position: absolute
   z-index: 9
   width: 230px
   margin-left: 5px
-  background: white
+  background: #E8EAED
   box-shadow: 0 2px 5px rgba(0, 0, 0, .15)
+  .DayPicker-Day
+    border: none
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)
+    background: #5C508A
+  .DayPicker-Day--start:not(.DayPicker-Day--outside):before
+    border-bottom-left-radius: 0
+  .DayPicker-Day--end:not(.DayPicker-Day--outside):after
+    border-top-right-radius: 0
+  .DayPicker-Day--start:not(.DayPicker-Day--outside):before,
+  .DayPicker-Day--end:not(.DayPicker-Day--outside):after
+    background: #5C508A
 .input-date
   display: block
   margin: 0 auto
+  height: 20px
+  background: #E8EAED
+  border: 0
+  padding: 3px
+  border-radius: 5px
 .input-date-between
   display: inline-block
-  width: 100px
+  width: 92px
   margin-left: 6px
+  height: 20px
+  background: #E8EAED
+  border: 0
+  padding: 3px
+  border-radius: 5px
 .date-picker-filter
-  position: relative
+  position: absolute
   height: 264px
   display: block
-.apply-button
+.apply-button-box
   position: fixed
-  bottom: 30px
-  left: 95px
+  bottom: 0
+  left: 0
+  width: 240px
+  height: 50px
+  background-color: #fff
   display: none
-  z-index: 10
+  .apply-button
+    position: absolute
+    bottom: 10px
+    left: 0
+    right: 0
+    z-index: 10
+    background: #266FEB
+    color: white
+    border: none
+    font-size: 16px
+    font-weight: bold
+    width: 160px
+    height: 30px
+    border-radius: 30px
+    margin: 0 auto
+    cursor: pointer
 .show-block
   display: block
 .hide-block
@@ -92,25 +138,38 @@ body
   padding: 0!important
 .input-and-clear-filter
   position: relative
+  background: white
+  height: 30px
+  width: 94%
+  margin: 0 auto
+  padding: 5px
+  border-radius: 0 0 5px 5px
 .condition-filter-date
   position: relative
   height: 36px
+  background: white
+  width: 94%
+  margin: 0 auto
+  padding: 5px
+  border-radius: 5px 5px 0 0
+  font-size: 12px
+  font-family: Arial
   .item-condition
     margin: 10px 2px 12px
     padding: 2px
     float: left
-    font-size: 12px
     cursor: pointer
+    color: #ab9bc6
   .active-condition
-    border: 2px solid black
+    background: #5C508A
     border-radius: 10px
-    margin-top: 8px
+    margin-top: 10px
+    color: white
 .condition-filter-date p
   float: left
-  font-size: 12px
   margin-top: 12px
   margin-bottom: 12px
-
+  color: #787471
 .Range
   .DayPicker-Day
     outline: none
