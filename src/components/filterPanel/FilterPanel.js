@@ -22,7 +22,7 @@ export default class FilterPanel extends Component {
 
   static propTypes = {
     fields: PropTypes.array.isRequired,
-    changeEqualsDate: PropTypes.func.isRequired,
+    changeDate: PropTypes.func.isRequired,
     changeFilter: PropTypes.bool,
     filterData: PropTypes.func,
     condition: PropTypes.array.isRequired,
@@ -47,7 +47,7 @@ export default class FilterPanel extends Component {
           {
             this.props.fields.map(field => {
               const {caption, type, name} = field
-              const Filter = filterItemType[FILTERS_MAP[name] || type] // _.get(filterItemType, this.dateItemFilter(caption), filterItemType[type])
+              const Filter = filterItemType[FILTERS_MAP[name] || type]
               return (
                 <ItemFilter
                   key={caption}
@@ -63,7 +63,6 @@ export default class FilterPanel extends Component {
           <ApplyFilter
             changeFilter={this.props.changeFilter}
             filterData={this.props.filterData}
-            correctDateInput = {this.props.correctDateInput}
           />
         </div>
       </Scrollbars>
