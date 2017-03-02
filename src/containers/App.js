@@ -5,6 +5,7 @@ import itemsMock from '../mock/items.json'
 import fields from '../mock/fields.json'
 import {formatingItems} from '../util/formatingDataContent'
 import moment from 'moment'
+import _ from 'lodash'
 
 const condition = [
   'equals',
@@ -19,6 +20,8 @@ export default class App extends Component {
     dateFilter: '',
     fromDateFilter: '',
     toDateFilter: '',
+    nameFilterInput: '',
+    valueFilterInput: '',
     changeFilter: false,
     items: [],
     filterItems: [],
@@ -32,6 +35,11 @@ export default class App extends Component {
       items,
       filterItems: items,
     })
+  }
+
+  checkVoidAllFilter = (dateFilter, fromDateFilter, toDateFilter, valueFilterInput) => {
+    return dateFilter !== '' || fromDateFilter !== '' ||
+      toDateFilter !== '' || valueFilterInput !== ''
   }
 
   componentDidMount() {
@@ -59,13 +67,19 @@ export default class App extends Component {
   }
 
   newFilteredData = () => {
-    const selectDay = moment(this.state.dateFilter).format('L')
-    const selectFromDay = moment(this.state.fromDateFilter).format('L')
-    const selectToDay = moment(this.state.toDateFilter).format('L')
-    return this.state.items.filter(item => {
-      const dayItem = moment(item['Date Submitted']).format('L')
-      return this.switchCoditionFilterDate(item, dayItem, selectDay, selectFromDay, selectToDay)
-    })
+    if (this.state.dateFilter !== '' ||
+      this.state.fromDateFilter !== '' ||
+      this.state.toDateFilter !== '') {
+      const selectDay = moment(this.state.dateFilter).format('L')
+      const selectFromDay = moment(this.state.fromDateFilter).format('L')
+      const selectToDay = moment(this.state.toDateFilter).format('L')
+
+      return this.state.items.filter(item => {
+        const dayItem = moment(item['Date Submitted']).format('L')
+        return this.switchCoditionFilterDate(item, dayItem, selectDay, selectFromDay, selectToDay)
+      })
+    }
+    return this.state.filterItems
   }
 
   checkValidDate = (item) => {
@@ -88,23 +102,62 @@ export default class App extends Component {
   }
 
   changeDate = (field, dateFilterValue) => {
-    const newState = dateFilterValue === ''
-      ? {
-        [field]: dateFilterValue,
-        changeFilter: false,
-        filterItems: this.state.items,
-      } : {
-        [field]: dateFilterValue,
-        changeFilter: true,
-      }
-    this.setState(newState)
+    const changeFilter = this.checkVoidAllFilter(
+      field === 'dateFilter' ? dateFilterValue : this.state.dateFilter,
+      field === 'fromDateFilter' ? dateFilterValue : this.state.fromDateFilter,
+      field === 'toDateFilter' ? dateFilterValue : this.state.toDateFilter,
+      this.state.valueFilterInput
+    )
+    this.setState({
+      [field]: dateFilterValue,
+      filterItems: dateFilterValue === '' ? this.state.items : this.state.filterItems,
+      changeFilter,
+    })
+  }
+
+  resetFilterDate = () => {
+    const changeFilter = this.checkVoidAllFilter('', '', '', this.state.valueFilterInput)
+    this.setState({
+      dateFilter: '',
+      fromDateFilter: '',
+      toDateFilter: '',
+      filterItems: this.state.items,
+      changeFilter,
+    })
+  }
+
+  filterForInput = (filterItems) => {
+    if (this.state.nameFilterInput !== '') {
+      return filterItems.filter(item => {
+        const itemStr = item[this.state.nameFilterInput].toLowerCase()
+        return _.includes(itemStr, this.state.valueFilterInput)
+      })
+    }
+    return filterItems
   }
 
   filterData = () => {
-    const filterItems = this.newFilteredData()
+    let filterItems = this.newFilteredData()
+    filterItems = this.filterForInput(filterItems)
+
     this.setState({
       filterItems,
       changeFilter: false,
+    })
+  }
+
+  inputFilterDefinition = (nameFilterInput, valueFilterInput) => {
+    const changeFilter = this.checkVoidAllFilter(
+      this.state.dateFilter,
+      this.state.fromDateFilter,
+      this.state.toDateFilter,
+      valueFilterInput
+    )
+    this.setState({
+      nameFilterInput,
+      valueFilterInput,
+      filterItems: valueFilterInput === '' ? this.state.items : this.state.filterItems,
+      changeFilter,
     })
   }
 
@@ -115,17 +168,20 @@ export default class App extends Component {
       activeConditionDate,
       changeFilter,
     } = this.state
+
     return (
       <div>
         <FilterPanel
           fields={fields.fields}
-          changeDate = {this.changeDate}
+          changeDate={this.changeDate}
           changeFilter={changeFilter}
           filterData={this.filterData}
           condition={condition}
           handleChangeCondition={this.handleChangeCondition}
           activeConditionDate={activeConditionDate}
           correctDateInput={moment(dateFilter, 'L', true).isValid()}
+          inputFilterDefinition={this.inputFilterDefinition}
+          resetFilterDate={this.resetFilterDate}
         />
         <Content
           fields={fields.fields}

@@ -13,6 +13,7 @@ export default class DateBodyItemFilter extends Component {
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
     changeDate: PropTypes.func,
+    resetFilterDate: PropTypes.func,
   }
 
   state = {
@@ -99,7 +100,6 @@ export default class DateBodyItemFilter extends Component {
             [typeFilter + 'Input']: value,
           },
           () => {
-            console.log(this.state.selectedDay)
             this.daypicker.showMonth(this.state.selectedDay)
           },
           this.props.changeDate(typeFilter === 'to' ? this.toChange : this.fromChange, momentDay)
@@ -188,7 +188,7 @@ export default class DateBodyItemFilter extends Component {
       toInput: '',
       isSelectingLastDay: false,
       selectedDay: null,
-    }, this.props.changeDate(this.oneInputValue, ''))
+    }, this.props.resetFilterDate())
   }
 
   render() {
@@ -226,7 +226,7 @@ export default class DateBodyItemFilter extends Component {
             onChange={ activeConditionDate === 'between' ? (e) => this.handleBetweenInputChange(e, 'from') : this.handleInputChange}
             onFocus={ this.handleInputFocus }
             onBlur={ activeConditionDate === 'between' ? undefined : this.handleInputBlur }
-            className={cx({'input-date-between': activeConditionDate === 'between'}, 'input-date')}
+            className={cx({'input-date-between': activeConditionDate === 'between'}, 'input-filter')}
             onKeyDown={this.handleInputKeyDown}
           />
           <input
@@ -243,7 +243,11 @@ export default class DateBodyItemFilter extends Component {
             onKeyDown={this.handleInputKeyDown}
           />
           <div
-            className={cx({'delete-input-filter-between': activeConditionDate === 'between'}, 'delete-input-filter')}
+            className={cx(
+              {'show-block': fromInput !== '' || value !== '' || toInput !== ''},
+              {'delete-input-filter-between': activeConditionDate === 'between'},
+              'delete-input-filter hide-block')
+            }
             onClick={this.reset}
           >&#10006;</div>
         </div>

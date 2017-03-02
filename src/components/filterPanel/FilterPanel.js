@@ -29,6 +29,8 @@ export default class FilterPanel extends Component {
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
     correctDateInput: PropTypes.bool,
+    inputFilterDefinition: PropTypes.func,
+    resetFilterDate: PropTypes.func,
   }
 
   dateItemFilter = (caption) => {
@@ -55,6 +57,8 @@ export default class FilterPanel extends Component {
                 >
                   <Filter
                     { ...this.props }
+                    placeholderInput = {caption}
+                    inputFilterDefinition = {value => this.props.inputFilterDefinition(name, value)}
                   />
                 </ItemFilter>
               )
