@@ -8,19 +8,21 @@ export default class InputFilter extends Component {
 
   static propTypes = {
     placeholderInput: PropTypes.string.isRequired,
-    inputFilterDefinition: PropTypes.func.isRequired,
+    changeInputFilter: PropTypes.func.isRequired,
+    resetFilterInput: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
   }
 
   changeInput = (e) => {
     this.setState({
       value: e.target.value,
-    }, this.props.inputFilterDefinition(e.target.value))
+    }, this.props.changeInputFilter(e.target.value))
   }
 
   reset = () => {
     this.setState({
       value: '',
-    }, this.props.inputFilterDefinition(''))
+    }, this.props.resetFilterInput(this.props.name))
   }
 
   render() {

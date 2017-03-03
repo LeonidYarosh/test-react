@@ -28,9 +28,9 @@ export default class FilterPanel extends Component {
     condition: PropTypes.array.isRequired,
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
-    correctDateInput: PropTypes.bool,
-    inputFilterDefinition: PropTypes.func,
+    changeInputFilter: PropTypes.func,
     resetFilterDate: PropTypes.func,
+    resetFilterInput: PropTypes.func,
   }
 
   dateItemFilter = (caption) => {
@@ -42,8 +42,8 @@ export default class FilterPanel extends Component {
       <Scrollbars
         autoHide
         universal={true}
-        style={{ width: 240}}
-        className = 'scroll-box'
+        style={{width: 240}}
+        className='scroll-box'
       >
         <div className="filter-panel">
           {
@@ -57,8 +57,10 @@ export default class FilterPanel extends Component {
                 >
                   <Filter
                     { ...this.props }
-                    placeholderInput = {caption}
-                    inputFilterDefinition = {value => this.props.inputFilterDefinition(name, value)}
+                    placeholderInput={caption}
+                    changeInputFilter={value => this.props.changeInputFilter(name, value)}
+                    name = {name}
+                    resetFilterInput={this.props.resetFilterInput}
                   />
                 </ItemFilter>
               )
