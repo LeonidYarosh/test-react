@@ -112,21 +112,29 @@ export default class App extends Component {
 
   checkValidDate = (item) => {
     if (moment(this.state.dateFilterCollection.dateFilter).isValid() && item !== 'between') {
-      this.setState({
-        filterChanged: true,
-      })
+      return true
     }
     if (item === 'between') {
-      this.setState({
-        filterChanged: false,
-      })
+      return false
     }
   }
 
   handleChangeCondition = (item) => {
+    const {dateFilterCollection} = this.state
+    const filterChanged = this.checkValidDate(item)
     this.setState({
       activeConditionDate: item,
-    }, this.checkValidDate(item))
+      dateFilterCollection: {
+        ...dateFilterCollection,
+        fromDateFilter: item === 'between' ?
+          dateFilterCollection.dateFilter :
+          dateFilterCollection.fromDateFilter,
+        dateFilter: item !== 'between' && dateFilterCollection.dateFilter === '' ?
+          dateFilterCollection.fromDateFilter :
+          dateFilterCollection.dateFilter,
+      },
+      filterChanged,
+    })
   }
 
   changeDate = (field, dateFilterValue) => {
