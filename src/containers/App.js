@@ -3,11 +3,15 @@ import FilterPanel from '../components/filterPanel/FilterPanel'
 import Content from '../components/Content'
 import itemsMock from '../mock/items.json'
 import fields from '../mock/fields.json'
-import {formatingItems, inputFieldCollectionName} from '../util/formatingDataContent'
+import {
+  formatingItems,
+  inputFieldCollectionName,
+  formattingDate,
+} from '../util/formatingDataContent'
 import moment from 'moment'
 import _ from 'lodash'
 
-const condition = [
+const conditions = [
   'equals',
   'before',
   'after',
@@ -25,10 +29,10 @@ export default class App extends Component {
     inputFieldCollection: {},
     nameFilterInput: '',
     valueFilterInput: '',
-    changeFilter: false,
+    filterChanged: false,
     items: [],
-    filterItems: [],
-    activeConditionDate: 'equals',
+    filteredItems: [],
+    activeConditionDate: conditions[0],
   }
 
   reloadData = () => {
@@ -36,7 +40,7 @@ export default class App extends Component {
     const inputFieldCollection = inputFieldCollectionName(fields.fields)
     this.setState({
       items,
-      filterItems: items,
+      filteredItems: items,
       inputFieldCollection,
     })
   }
@@ -47,9 +51,10 @@ export default class App extends Component {
   }
 
   checkAllInputFilterCollection = () => {
+    const {inputFieldCollection} = this.state
     let checkFullInput = false
-    for (const i in this.state.inputFieldCollection) {
-      if (this.state.inputFieldCollection[i].value !== '') {
+    for (const i in inputFieldCollection) {
+      if (inputFieldCollection[i].value !== '') {
         checkFullInput = true
       }
     }
@@ -66,50 +71,54 @@ export default class App extends Component {
     this.reloadData()
   }
 
-  switchCoditionFilterDate = (item, dayItem, selectDay, selectFromDay, selectToDay) => {
+  switchCoditionFilterDate = (dayItem, selectedDay, selectedFromDay, selectedToDay) => {
     switch (this.state.activeConditionDate) {
       case 'equals': {
-        return moment(item['Date Submitted']).format('L') === moment(selectDay).format('L')
+        return dayItem === formattingDate(selectedDay)
       }
       case 'before': {
-        return moment(dayItem).isBefore(selectDay)
+        return moment(dayItem).isBefore(selectedDay)
       }
       case 'after': {
-        return moment(dayItem).isAfter(selectDay)
+        return moment(dayItem).isAfter(selectedDay)
       }
       case 'between': {
-        return moment(dayItem).isBetween(selectFromDay, selectToDay)
+        return moment(dayItem).isBetween(selectedFromDay, selectedToDay)
       }
       default: {
-        return moment(item['Date Submitted']).format('L') === moment(selectDay).format('L')
+        return dayItem === formattingDate(selectedDay)
       }
     }
   }
 
   newFilteredData = () => {
-    if (this.state.dateFilterCollection.dateFilter !== '' ||
-      this.state.dateFilterCollection.fromDateFilter !== '' ||
-      this.state.dateFilterCollection.toDateFilter !== '') {
-      const selectDay = moment(this.state.dateFilterCollection.dateFilter).format('L')
-      const selectFromDay = moment(this.state.dateFilterCollection.fromDateFilter).format('L')
-      const selectToDay = moment(this.state.dateFilterCollection.toDateFilter).format('L')
-      return this.state.items.filter(item => {
-        const dayItem = moment(item['Date Submitted']).format('L')
-        return this.switchCoditionFilterDate(item, dayItem, selectDay, selectFromDay, selectToDay)
+    const {
+      dateFilterCollection,
+      items,
+    } = this.state
+    if (dateFilterCollection.dateFilter !== '' ||
+      dateFilterCollection.fromDateFilter !== '' ||
+      dateFilterCollection.toDateFilter !== '') {
+      const selectedDay = formattingDate(dateFilterCollection.dateFilter)
+      const selectedFromDay = formattingDate(dateFilterCollection.fromDateFilter)
+      const selectedToDay = formattingDate(dateFilterCollection.toDateFilter)
+      return items.filter(item => {
+        const dayItem = formattingDate(item['Date Submitted'])
+        return this.switchCoditionFilterDate(dayItem, selectedDay, selectedFromDay, selectedToDay)
       })
     }
-    return this.state.items
+    return items
   }
 
   checkValidDate = (item) => {
     if (moment(this.state.dateFilterCollection.dateFilter).isValid() && item !== 'between') {
       this.setState({
-        changeFilter: true,
+        filterChanged: true,
       })
     }
     if (item === 'between') {
       this.setState({
-        changeFilter: false,
+        filterChanged: false,
       })
     }
   }
@@ -121,31 +130,36 @@ export default class App extends Component {
   }
 
   changeDate = (field, dateFilterValue) => {
-    const changeFilter = this.checkVoidAllFilter(
-      field === 'dateFilter' ? dateFilterValue : this.state.dateFilterCollection.dateFilter,
-      field === 'fromDateFilter' ? dateFilterValue : this.state.dateFilterCollection.fromDateFilter,
-      field === 'toDateFilter' ? dateFilterValue : this.state.dateFilterCollection.toDateFilter,
+    const {
+      dateFilterCollection,
+      items,
+      filteredItems,
+    } = this.state
+    const filterChanged = this.checkVoidAllFilter(
+      field === 'dateFilter' ? dateFilterValue : dateFilterCollection.dateFilter,
+      field === 'fromDateFilter' ? dateFilterValue : dateFilterCollection.fromDateFilter,
+      field === 'toDateFilter' ? dateFilterValue : dateFilterCollection.toDateFilter,
     )
     this.setState({
       dateFilterCollection: {
-        ...this.state.dateFilterCollection,
+        ...dateFilterCollection,
         [field]: dateFilterValue,
       },
-      filterItems: dateFilterValue === '' ? this.state.items : this.state.filterItems,
-      changeFilter,
+      filteredItems: dateFilterValue === '' ? items : filteredItems,
+      filterChanged,
     })
   }
 
   resetFilterDate = () => {
-    const changeFilter = this.checkVoidAllFilter('', '', '')
+    const filterChanged = this.checkVoidAllFilter('', '', '')
     this.setState({
       dateFilterCollection: {
         dateFilter: '',
         fromDateFilter: '',
         toDateFilter: '',
       },
-      filterItems: this.state.items,
-      changeFilter,
+      filteredItems: this.state.items,
+      filterChanged,
     })
   }
 
@@ -162,29 +176,35 @@ export default class App extends Component {
   }
 
   resetFilterInput = (name) => {
+    const {
+      dateFilterCollection,
+      items,
+      inputFieldCollection,
+    } = this.state
     const checkFullInputFilterCollection = this.checkInputFilterCollectionExceptOne(name)
     const checkFullDateFilterCollection = this.checkDateFilter(
-      this.state.dateFilterCollection.dateFilter,
-      this.state.dateFilterCollection.fromDateFilter,
-      this.state.dateFilterCollection.toDateFilter)
+      dateFilterCollection.dateFilter,
+      dateFilterCollection.fromDateFilter,
+      dateFilterCollection.toDateFilter)
     this.setState({
       inputFieldCollection: {
-        ...this.state.inputFieldCollection,
+        ...inputFieldCollection,
         [name]: {
-          ...this.state.inputFieldCollection[name],
+          ...inputFieldCollection[name],
           value: '',
         },
       },
-      changeFilter: checkFullInputFilterCollection || checkFullDateFilterCollection,
-      filterItems: this.state.items,
+      filterChanged: checkFullInputFilterCollection || checkFullDateFilterCollection,
+      filteredItems: items,
     })
   }
 
-  filterForInput = (filterItems) => {
-    let newFilterItems = filterItems
-    for (const i in this.state.inputFieldCollection) {
-      if (this.state.inputFieldCollection[i].value !== '') {
-        const el = this.state.inputFieldCollection[i]
+  filterForInput = (filteredItems) => {
+    const {inputFieldCollection} = this.state
+    let newFilterItems = filteredItems
+    for (const i in inputFieldCollection) {
+      if (inputFieldCollection[i].value !== '') {
+        const el = inputFieldCollection[i]
         newFilterItems = newFilterItems.filter(item => {
           const itemStr = item[el.name].toLowerCase()
           return _.includes(itemStr, el.value)
@@ -195,46 +215,51 @@ export default class App extends Component {
   }
 
   filterData = () => {
-    let filterItems = this.newFilteredData()
-    filterItems = this.filterForInput(filterItems)
+    let filteredItems = this.newFilteredData()
+    filteredItems = this.filterForInput(filteredItems)
 
     this.setState({
-      filterItems,
-      changeFilter: false,
+      filteredItems,
+      filterChanged: false,
     })
   }
 
   changeInputFilter = (nameFilterInput, valueFilterInput) => {
-    const changeFilter = valueFilterInput !== ''
+    const {
+      inputFieldCollection,
+      items,
+      filteredItems,
+    } = this.state
+    const filterChanged = valueFilterInput !== ''
     this.setState({
       inputFieldCollection: {
-        ...this.state.inputFieldCollection,
+        ...inputFieldCollection,
         [nameFilterInput]: {
-          ...this.state.inputFieldCollection[nameFilterInput],
+          ...inputFieldCollection[nameFilterInput],
           value: valueFilterInput,
         },
       },
-      filterItems: valueFilterInput === '' ? this.state.items : this.state.filterItems,
-      changeFilter,
+      filteredItems: valueFilterInput === '' ? items : filteredItems,
+      filterChanged,
     })
   }
 
   render() {
     const {
-      filterItems,
+      filteredItems,
       activeConditionDate,
-      changeFilter,
+      filterChanged,
     } = this.state
 
     return (
       <div>
         <FilterPanel
           fields={fields.fields}
-          changeFilter={changeFilter}
+          filterChanged={filterChanged}
           changeDate={this.changeDate}
           changeInputFilter={this.changeInputFilter}
           filterData={this.filterData}
-          condition={condition}
+          conditions={conditions}
           handleChangeCondition={this.handleChangeCondition}
           activeConditionDate={activeConditionDate}
           resetFilterDate={this.resetFilterDate}
@@ -242,7 +267,7 @@ export default class App extends Component {
         />
         <Content
           fields={fields.fields}
-          items={filterItems}
+          items={filteredItems}
         />
       </div>
     )

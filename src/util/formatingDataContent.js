@@ -8,7 +8,7 @@ export function formatingItems(items) {
 }
 
 export function inputFieldCollectionName(fields) {
-  let inputFieldCollectionName = {}
+  const inputFieldCollectionName = {}
   fields.map(el =>{
     if (el.name !== 'Date Submitted' && el.type === 'text') {
       inputFieldCollectionName[el.name] = {
@@ -19,4 +19,8 @@ export function inputFieldCollectionName(fields) {
     }
   })
   return inputFieldCollectionName
+}
+
+export function formattingDate(date) {
+  return moment(date).format('L')
 }

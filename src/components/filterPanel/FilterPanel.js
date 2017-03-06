@@ -23,9 +23,9 @@ export default class FilterPanel extends Component {
   static propTypes = {
     fields: PropTypes.array.isRequired,
     changeDate: PropTypes.func.isRequired,
-    changeFilter: PropTypes.bool,
+    filterChanged: PropTypes.bool,
     filterData: PropTypes.func,
-    condition: PropTypes.array.isRequired,
+    conditions: PropTypes.array.isRequired,
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
     changeInputFilter: PropTypes.func,
@@ -38,6 +38,14 @@ export default class FilterPanel extends Component {
   }
 
   render() {
+    const {
+      changeInputFilter,
+      fields,
+      resetFilterInput,
+      filterChanged,
+      filterData,
+    } = this.props
+
     return (
       <Scrollbars
         autoHide
@@ -47,7 +55,7 @@ export default class FilterPanel extends Component {
       >
         <div className="filter-panel">
           {
-            this.props.fields.map(field => {
+            fields.map(field => {
               const {caption, type, name} = field
               const Filter = filterItemType[FILTERS_MAP[name] || type]
               return (
@@ -58,17 +66,17 @@ export default class FilterPanel extends Component {
                   <Filter
                     { ...this.props }
                     placeholderInput={caption}
-                    changeInputFilter={value => this.props.changeInputFilter(name, value)}
+                    changeInputFilter={value => changeInputFilter(name, value)}
                     name = {name}
-                    resetFilterInput={this.props.resetFilterInput}
+                    resetFilterInput={resetFilterInput}
                   />
                 </ItemFilter>
               )
             })
           }
           <ApplyFilter
-            changeFilter={this.props.changeFilter}
-            filterData={this.props.filterData}
+            filterChanged={filterChanged}
+            filterData={filterData}
           />
         </div>
       </Scrollbars>

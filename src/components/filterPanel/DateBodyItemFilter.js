@@ -4,12 +4,13 @@ import DayPicker, {DateUtils} from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import SwitchConditionFilterDate from './SwitchConditionFilterDate'
 import cx from 'classnames'
+import {formattingDate} from '../../util/formatingDataContent'
 
 export default class DateBodyItemFilter extends Component {
 
   static propTypes = {
     filterData: PropTypes.func.isRequired,
-    condition: PropTypes.array.isRequired,
+    conditions: PropTypes.array.isRequired,
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
     changeDate: PropTypes.func,
@@ -23,25 +24,23 @@ export default class DateBodyItemFilter extends Component {
     isSelectingLastDay: false,
     from: null,
     to: null,
-    fromInput: '',
-    toInput: '',
   }
 
   input = null
   daypicker = null
   clickedInside = false
-  clickTimeout = null
+  cleanClickInside = null
   oneInputValue = 'dateFilter'
   fromChange = 'fromDateFilter'
   toChange = 'toDateFilter'
 
   componentWillUnmount() {
-    clearTimeout(this.clickTimeout())
+    clearTimeout(this.cleanClickInside())
   }
 
   handleContainerMouseDown = () => {
     this.clickedInside = true
-    this.clickTimeout = setTimeout(() => {
+    this.cleanClickInside = setTimeout(() => {
       this.clickedInside = false
     }, 0)
   }
@@ -97,7 +96,6 @@ export default class DateBodyItemFilter extends Component {
           {
             selectedDay: momentDay.toDate(),
             [typeFilter]: momentDay.toDate(),
-            [typeFilter + 'Input']: value,
           },
           () => {
             this.daypicker.showMonth(this.state.selectedDay)
@@ -108,7 +106,7 @@ export default class DateBodyItemFilter extends Component {
       else {
         this.setState(
           {
-            [typeFilter + 'Input']: value,
+            [typeFilter]: value,
             selectedDay: null,
           },
           this.props.changeDate(typeFilter === 'to' ? this.toChange : this.fromChange, momentDay)
@@ -119,17 +117,17 @@ export default class DateBodyItemFilter extends Component {
 
   handleDayClick = (day) => {
     this.setState({
-      value: moment(day).format('L'),
+      value: formattingDate(day),
       selectedDay: day,
       showOverlay: false,
-    }, this.props.changeDate(this.oneInputValue, moment(day).format('L')))
+    }, this.props.changeDate(this.oneInputValue, formattingDate(day)))
     this.input.blur()
   }
 
   handleInputKeyDown = (e) => {
-    if (e.keyCode === 13 && this.state.value !== '' ||
-      e.keyCode === 13 && this.state.from !== '' ||
-      e.keyCode === 13 && this.state.to !== ''
+    if (e.keyCode === 13 &&
+      (this.state.value !== '' || this.state.from !== '' ||
+      this.state.to !== '')
     ) {
       this.props.filterData()
     }
@@ -141,18 +139,16 @@ export default class DateBodyItemFilter extends Component {
       this.setState({
         isSelectingLastDay: true,
         from: day,
-        fromInput: moment(day).format('L'),
         to: null,
         showOverlay: true,
-      }, this.props.changeDate(this.fromChange, moment(day).format('L')))
+      }, this.props.changeDate(this.fromChange, formattingDate(day)))
     }
     if (isSelectingLastDay && from && day < from) {
       this.setState({
         from: day,
-        fromInput: day,
         to: null,
         showOverlay: true,
-      }, this.props.changeDate(this.fromChange, moment(day).format('L')))
+      }, this.props.changeDate(this.fromChange, formattingDate(day)))
     }
     if (isSelectingLastDay && DateUtils.isSameDay(day, from)) {
       this.reset()
@@ -174,8 +170,7 @@ export default class DateBodyItemFilter extends Component {
     this.setState(
       {
         to: day,
-        toInput: moment(day).format('L'),
-      }, this.props.changeDate(this.toChange, moment(day).format('L'))
+      }, this.props.changeDate(this.toChange, formattingDate(day))
     )
   }
 
@@ -184,8 +179,6 @@ export default class DateBodyItemFilter extends Component {
       value: '',
       from: null,
       to: null,
-      fromInput: '',
-      toInput: '',
       isSelectingLastDay: false,
       selectedDay: null,
     }, this.props.resetFilterDate())
@@ -193,7 +186,7 @@ export default class DateBodyItemFilter extends Component {
 
   render() {
     const {
-      condition,
+      conditions,
       handleChangeCondition,
       activeConditionDate,
     } = this.props
@@ -202,16 +195,35 @@ export default class DateBodyItemFilter extends Component {
       value,
       from,
       to,
-      fromInput,
-      toInput,
       selectedDay,
       showOverlay,
     } = this.state
+    let fromInput = ''
+    let toInput = ''
+    let toSelectDays = null
+
+    if (from === null) {
+      fromInput = ''
+    }
+    else {
+      fromInput = moment(from, 'L', true).isValid() ? formattingDate(from) : from
+    }
+
+    if (to === null) {
+      toInput = ''
+    }
+    else {
+      if (moment(to, 'L', true).isValid()) {
+        toInput = formattingDate(to)
+        toSelectDays = to
+      }
+      else toInput = to
+    }
 
     return (
       <div onMouseDown={ this.handleContainerMouseDown }>
         <SwitchConditionFilterDate
-          condition={condition}
+          conditions={conditions}
           handleChangeCondition={handleChangeCondition}
           activeConditionDate={activeConditionDate}
         />
@@ -262,7 +274,7 @@ export default class DateBodyItemFilter extends Component {
                     this.daypicker = el
                   } }
                   initialMonth={ selectedDay || undefined }
-                  selectedDays={ [from, {from, to}] }
+                  selectedDays={ [!toSelectDays ? from : {from, to}] }
                   disabledDays={ {before: from} }
                   modifiers={ {
                     start: from,

@@ -10,6 +10,7 @@ export default class InputFilter extends Component {
     placeholderInput: PropTypes.string.isRequired,
     changeInputFilter: PropTypes.func.isRequired,
     resetFilterInput: PropTypes.func.isRequired,
+    filterData: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
   }
 
@@ -25,6 +26,12 @@ export default class InputFilter extends Component {
     }, this.props.resetFilterInput(this.props.name))
   }
 
+  handleInputKeyDown = (e) => {
+    if (e.keyCode === 13 && this.state.value !== '') {
+      this.props.filterData()
+    }
+  }
+
   render() {
     const {
       placeholderInput,
@@ -38,6 +45,7 @@ export default class InputFilter extends Component {
           placeholder={placeholderInput}
           value={this.state.value}
           onChange={this.changeInput}
+          onKeyDown={this.handleInputKeyDown}
         />
         <div
           className={cx({'show-block': this.state.value !== ''}, 'delete-input-filter hide-block')}

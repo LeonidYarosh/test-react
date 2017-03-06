@@ -49,8 +49,8 @@ class InputDatePicker extends Component {
                 start: from,
                 end: to,
               } }
-              onDayClick={(e) => {console.log(e); handleDayClickBetween()} }
-              onDayMouseEnter={(e) => {console.log(e, 123); handleDayMouseEnter()}}
+              onDayClick={(e) => {handleDayClickBetween()} }
+              onDayMouseEnter={(e) => { handleDayMouseEnter()}}
             />
             :
             <DayPicker
@@ -58,7 +58,7 @@ class InputDatePicker extends Component {
                 daypickerChange(el)
               } }
               initialMonth={ selectedDay || undefined }
-              onDayClick={(e) => {console.log(e); handleDayClick()}}
+              onDayClick={(e) => {handleDayClick()}}
               selectedDays={ day => DateUtils.isSameDay(selectedDay, day) }
             />
         }
