@@ -4,22 +4,22 @@ import cx from 'classnames'
 export default class SwitchConditionFilterDate extends Component {
 
   static propTypes = {
-    condition: PropTypes.array.isRequired,
+    conditions: PropTypes.array.isRequired,
     handleChangeCondition: PropTypes.func,
     activeConditionDate: PropTypes.string,
   }
 
   render() {
     const {
-      condition,
+      conditions,
       handleChangeCondition,
       activeConditionDate,
     } = this.props
     return (
-      <div className="condition-filter-date">
-        <p>Condition:</p>
+      <div className="conditions-filter-date">
+        <p>Conditions:</p>
         {
-          condition.map((item, i) => {
+          conditions.map((item, i) => {
             return <div
               className={cx({'active-condition': item === activeConditionDate}, 'item-condition')}
               key={i}

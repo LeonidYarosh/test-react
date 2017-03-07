@@ -20,11 +20,13 @@ body
 .scroll-box
   height: 100vh !important
   float: left
+.group-filter
+  background: #F5F7F9
 .item-filter
   position: relative
   width: 240px
   height: 20px
-  border-bottom: 2px solid #c4c4c4
+  border-bottom: 1px solid #ececec
   font-size: 14px
   padding: 15px 0
   cursor: pointer
@@ -62,7 +64,10 @@ body
   display: none
   transition: all 0.2s
   position: relative
-  background: #f5f7f9
+  background: white
+  width: 94%
+  margin: 0 auto
+  border-radius: 10px
 .calendar-box
   position: absolute
   z-index: 9
@@ -83,17 +88,20 @@ body
   .DayPicker-Day--start:not(.DayPicker-Day--outside):before,
   .DayPicker-Day--end:not(.DayPicker-Day--outside):after
     background: #5C508A
-.input-date
+.input-filter-box
+  padding: 5px
+.input-filter
   display: block
   margin: 0 auto
   height: 20px
   background: #E8EAED
   border: 0
-  padding: 3px
   border-radius: 5px
+  color: #6D6E6E
+  padding: 3px 8px
 .input-date-between
   display: inline-block
-  width: 92px
+  width: 86px
   margin-left: 6px
   height: 20px
   background: #E8EAED
@@ -129,10 +137,10 @@ body
     border-radius: 30px
     margin: 0 auto
     cursor: pointer
-.show-block
-  display: block
 .hide-block
   display: none
+.show-block
+  display: block
 .delete-input-filter
   cursor: pointer
   width: 10px
@@ -141,25 +149,17 @@ body
   top: 8px
   right: 42px
 .delete-input-filter-between
-  right: 6px
+  right: 10px
 .ReactVirtualized__Table__row
   padding: 0!important
 .input-and-clear-filter
   position: relative
-  background: white
   height: 30px
-  width: 94%
-  margin: 0 auto
   padding: 5px
-  border-radius: 0 0 5px 5px
-.condition-filter-date
+.conditions-filter-date
   position: relative
   height: 36px
-  background: white
-  width: 94%
-  margin: 0 auto
   padding: 5px
-  border-radius: 5px 5px 0 0
   font-size: 12px
   .item-condition
     margin: 14px 2px 8px
@@ -176,11 +176,11 @@ body
     color: white
     padding: 5px 2px
     margin-top: 10px
-.condition-filter-date p
-  float: left
-  margin-top: 12px
-  margin-bottom: 12px
-  color: #787471
+  p
+    float: left
+    margin-top: 12px
+    margin-bottom: 12px
+    color: #787471
 .Range
   .DayPicker-Day
     outline: none
