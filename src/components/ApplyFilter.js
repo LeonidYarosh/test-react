@@ -4,16 +4,20 @@ import cx from 'classnames'
 export default class ApplyFilter extends Component {
 
   static propTypes = {
-    filterChanged: PropTypes.bool,
-    filterData: PropTypes.func,
+    showApply: PropTypes.bool,
+    onApply: PropTypes.func,
   }
 
   render() {
+    const {
+      showApply,
+      onApply,
+    } = this.props
     return (
-      <div className={cx({'show-block': this.props.filterChanged}, 'apply-button-box')}>
+      <div className={cx({'show-block': showApply}, 'apply-button-box')}>
         <button
           className="apply-button"
-          onClick={this.props.filterData}
+          onClick={onApply}
         >
           Apply
         </button>

@@ -14,23 +14,14 @@ const filterItemType = {
   date: DateBodyItemFilter,
 }
 
-const FILTERS_MAP = {
-  'Date Submitted': 'date',
-}
-
 export default class FilterPanel extends Component {
 
   static propTypes = {
     fields: PropTypes.array.isRequired,
-    changeDate: PropTypes.func.isRequired,
-    filterChanged: PropTypes.bool,
-    filterData: PropTypes.func,
-    conditions: PropTypes.array.isRequired,
-    handleChangeCondition: PropTypes.func,
-    activeConditionDate: PropTypes.string,
-    changeInputFilter: PropTypes.func,
-    resetFilterDate: PropTypes.func,
-    resetFilterInput: PropTypes.func,
+    onChangeFilter: PropTypes.func.isRequired,
+    onApply: PropTypes.func.isRequired,
+    showApply: PropTypes.bool.isRequired,
+    conditions: PropTypes.object.isRequired,
   }
 
   dateItemFilter = (caption) => {
@@ -39,11 +30,11 @@ export default class FilterPanel extends Component {
 
   render() {
     const {
-      changeInputFilter,
       fields,
-      resetFilterInput,
-      filterChanged,
-      filterData,
+      onApply,
+      onChangeFilter,
+      showApply,
+      conditions,
     } = this.props
 
     return (
@@ -55,9 +46,9 @@ export default class FilterPanel extends Component {
       >
         <div className="filter-panel">
           {
-            fields.map(field => {
-              const {caption, type, name} = field
-              const Filter = filterItemType[FILTERS_MAP[name] || type]
+            fields.map((field, i) => {
+              const {caption, type} = field
+              const Filter = filterItemType[type]
               return (
                 <ItemFilter
                   key={caption}
@@ -65,18 +56,18 @@ export default class FilterPanel extends Component {
                 >
                   <Filter
                     { ...this.props }
+                    condition={field.condition}
+                    onChangeFilter = { condition => onChangeFilter(i, condition)}
                     placeholderInput={caption}
-                    changeInputFilter={value => changeInputFilter(name, value)}
-                    name = {name}
-                    resetFilterInput={resetFilterInput}
+                    conditions={conditions[type]}
                   />
                 </ItemFilter>
               )
             })
           }
           <ApplyFilter
-            filterChanged={filterChanged}
-            filterData={filterData}
+            showApply={showApply}
+            onApply={onApply}
           />
         </div>
       </Scrollbars>
