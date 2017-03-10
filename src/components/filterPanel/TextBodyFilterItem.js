@@ -3,6 +3,12 @@ import cx from 'classnames'
 import update from 'react-addons-update'
 import _ from 'lodash'
 
+export const conditions = [
+  'equals',
+  'contain',
+  'notEquals',
+]
+
 export function textFilter(condition, items, name) {
   return items.filter(item => {
     const inputValue = condition.value.toLowerCase()
@@ -12,9 +18,6 @@ export function textFilter(condition, items, name) {
 }
 
 export default class InputFilter extends Component {
-  state = {
-    value: '',
-  }
 
   static propTypes = {
     placeholderInput: PropTypes.string.isRequired,
@@ -24,30 +27,22 @@ export default class InputFilter extends Component {
     resetFilteredItems: PropTypes.func.isRequired,
   }
 
-  changeConditionInputValue = (value) => {
-    const {condition} = this.props
-    return update(condition, {
-      value: {$set: value},
-    })
-  }
-
   changeInput = (e) => {
     const {value} = e.target
-    const conditionChanged = this.changeConditionInputValue(value)
-    this.props.onChangeFilter(conditionChanged)
-  }
-
-  resetInputValue = () => {
     const {condition} = this.props
-    return update(condition, {
-      value: {$set: ''},
+    const newCondition = update(condition, {
+      value: {$set: value},
     })
+    this.props.onChangeFilter(newCondition)
   }
 
   reset = () => {
-    const condition = this.resetInputValue()
+    const {condition} = this.props
+    const newCondition = update(condition, {
+      value: {$set: ''},
+    })
     this.props.resetFilteredItems()
-    this.props.onChangeFilter(condition)
+    this.props.onChangeFilter(newCondition)
   }
 
   handleInputKeyDown = (e) => {

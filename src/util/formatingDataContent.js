@@ -13,14 +13,14 @@ export function formatingItems(items) {
   })
 }
 
-export function formatingFields(fields, conditions) {
+export function formatingFields(fields, FILTERS) {
   return fields.map(field => {
     if (field.name === 'Date Submitted') {
       return {
         ...field,
         type: 'date',
         condition: {
-          type: conditions.date[0],
+          type: FILTERS.date.typesCondition[0],
           value: {
             from: '',
             to: '',
@@ -31,7 +31,7 @@ export function formatingFields(fields, conditions) {
     return {
       ...field,
       condition: {
-        type: conditions[field.type][0],
+        type: FILTERS[field.type].typesCondition[0],
         value: '',
       },
     }

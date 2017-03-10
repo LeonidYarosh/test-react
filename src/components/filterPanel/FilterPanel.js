@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import ItemFilter from './ItemFilter'
 import TextBodyItemFilter from './TextBodyFilterItem'
-import NumberBodyItemFilter from './NumberBodyItemFilter'
-import EnumBodyItemFilter from './EnumBodyItemFilter'
-import DateBodyItemFilter from './DateBodyItemFilter'
+import DateBodyItemFilter from './DateBodyFilterItem'
+import NumberBodyItemFilter from './NumberBodyFilterItem'
+import EnumBodyItemFilter from './EnumBodyFilterItem'
 import ApplyFilter from '../ApplyFilter'
 import {Scrollbars} from 'react-custom-scrollbars'
 
@@ -21,7 +21,6 @@ export default class FilterPanel extends Component {
     onChangeFilter: PropTypes.func.isRequired,
     onApply: PropTypes.func.isRequired,
     showApply: PropTypes.bool.isRequired,
-    conditions: PropTypes.object.isRequired,
   }
 
   dateItemFilter = (caption) => {
@@ -34,7 +33,6 @@ export default class FilterPanel extends Component {
       onApply,
       onChangeFilter,
       showApply,
-      conditions,
     } = this.props
 
     return (
@@ -59,7 +57,6 @@ export default class FilterPanel extends Component {
                     condition={field.condition}
                     onChangeFilter = { condition => onChangeFilter(i, condition)}
                     placeholderInput={caption}
-                    conditions={conditions[type]}
                   />
                 </ItemFilter>
               )

@@ -9,39 +9,31 @@ import {
 } from '../util/formatingDataContent'
 import update from 'react-addons-update'
 import {textFilter} from '../components/filterPanel/TextBodyFilterItem'
-import {dateFilter} from '../components/filterPanel/DateBodyItemFilter'
-import {enumFilter} from '../components/filterPanel/EnumBodyItemFilter'
-import {numberFilter} from '../components/filterPanel/NumberBodyItemFilter'
+import {dateFilter} from '../components/filterPanel/DateBodyFilterItem'
+import {enumFilter} from '../components/filterPanel/EnumBodyFilterItem'
+import {numberFilter} from '../components/filterPanel/NumberBodyFilterItem'
+import {conditions as textConditions} from '../components/filterPanel/TextBodyFilterItem'
+import {conditions as dateConditions} from '../components/filterPanel/DateBodyFilterItem'
+import {conditions as numberConditions} from '../components/filterPanel/NumberBodyFilterItem'
+import {conditions as enumConditions} from '../components/filterPanel/EnumBodyFilterItem'
 
-const conditions = {
-  number: [
-    'equals',
-    'notEquals',
-    'less',
-    'better',
-  ],
-  text: [
-    'contain',
-    'equals',
-    'notEquals',
-  ],
-  enum: [
-    'equals',
-    'notEquals',
-  ],
-  date: [
-    'equals',
-    'before',
-    'after',
-    'between',
-  ],
-}
-
-const FILTER_FUNC = {
-  text: textFilter,
-  date: dateFilter,
-  enum: enumFilter,
-  number: numberFilter,
+const FILTERS = {
+  text: {
+    typesCondition: textConditions,
+    functionFilter: textFilter,
+  },
+  date: {
+    typesCondition: dateConditions,
+    functionFilter: dateFilter,
+  },
+  number: {
+    typesCondition: numberConditions,
+    functionFilter: numberFilter,
+  },
+  enum: {
+    typesCondition: enumConditions,
+    functionFilter: enumFilter,
+  },
 }
 
 export default class App extends Component {
@@ -51,14 +43,11 @@ export default class App extends Component {
     items: [],
     filteredItems: [],
     showApply: false,
-    nameFilterInput: '',
-    valueFilterInput: '',
-    activeConditionDate: conditions[0],
   }
 
   reloadData = () => {
     const items = formatingItems(itemsMock.items)
-    const fields = formatingFields(fieldsMock.fields, conditions)
+    const fields = formatingFields(fieldsMock.fields, FILTERS)
     this.setState({
       items,
       filteredItems: items,
@@ -103,11 +92,11 @@ export default class App extends Component {
         console.log('1')
       }
       if (field.condition.value !== '' && field.type === 'text') {
-        filteredItems = FILTER_FUNC[field.type](field.condition, filteredItems, field.name)
+        filteredItems = FILTERS[field.type].functionFilter(field.condition, filteredItems, field.name)
       }
       if (field.type === 'date' &&
         (field.condition.value.from !== '' || field.condition.value.to !== '')) {
-        filteredItems = FILTER_FUNC[field.type](field.condition, filteredItems)
+        filteredItems = FILTERS[field.type].functionFilter(field.condition, filteredItems)
       }
     })
     return filteredItems
@@ -140,7 +129,6 @@ export default class App extends Component {
           onApply={this.onApply}
           showApply={showApply}
           resetFilteredItems={this.resetFilteredItems}
-          conditions={conditions}
         />
         <Content
           fields={fields}
