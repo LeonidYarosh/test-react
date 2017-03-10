@@ -88,10 +88,10 @@ export default class App extends Component {
     let filteredItems = [...items]
 
     fields.map(field => {
-      if (field.condition.value !== '' && field.type !== 'date' && field.type !== 'text') {
+      if (field.condition.value !== '' && field.type === 'enum') {
         console.log('1')
       }
-      if (field.condition.value !== '' && field.type === 'text') {
+      if (field.condition.value !== '' && (field.type === 'text' || field.type === 'number')) {
         filteredItems = FILTERS[field.type].functionFilter(field.condition, filteredItems, field.name)
       }
       if (field.type === 'date' &&

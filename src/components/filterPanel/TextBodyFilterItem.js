@@ -74,7 +74,6 @@ export default class InputFilter extends Component {
           onClick={this.reset}
         >&#10006;</div>
       </div>
-
     )
   }
 }
