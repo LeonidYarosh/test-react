@@ -1,0 +1,60 @@
+{
+  "fields": [
+    {
+      "name": "id",
+      "caption": "ID",
+      "type": "number",
+      "width": 10,
+      "isDefault": true
+    },
+    {
+      "name": "ProjectMeterNumber_fld",
+      "caption": "Meter #",
+      "type": "text",
+      "width": 15,
+      "isDefault": true
+    },
+    {
+      "name": "CustGenMailingAddress_fld",
+      "caption": "Address",
+      "type": "text",
+      "width": 10,
+      "isDefault": true
+    },
+    {
+      "name": "gu_Status",
+      "caption": "Status",
+      "type": "enum",
+      "width": 10,
+      "isDefault": true
+    },
+    {
+      "name": "gu_WorkflowStartUser",
+      "caption": "Owner",
+      "type": "text",
+      "width": 10,
+      "isDefault": true
+    },
+    {
+      "name": "Date Submitted",
+      "caption": "Date Submitted",
+      "type": "text",
+      "width": 10,
+      "isDefault": true
+    },
+    {
+      "name": "ProjectID",
+      "caption": "Project ID",
+      "type": "text",
+      "width": 10,
+      "isDefault": true
+    },
+    {
+      "name": "QueuePosition",
+      "caption": "Queue Position",
+      "type": "text",
+      "width": 20,
+      "isDefault": true
+    }
+  ]
+}
