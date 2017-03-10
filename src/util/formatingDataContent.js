@@ -1,24 +1,41 @@
 import moment from 'moment'
 
 export function formatingItems(items) {
-  return items.items.map(item =>{
-    item['Date Submitted'] = moment(item['Date Submitted']).format('L')
-    return item
+  return items.map(item => {
+    return item.hasOwnProperty('Date Submitted') ?
+    {
+      ...item,
+      'Date Submitted': formattingDate(item['Date Submitted']),
+    } :
+    {
+      ...item,
+    }
   })
 }
 
-export function inputFieldCollectionName(fields) {
-  const inputFieldCollectionName = {}
-  fields.map(el =>{
-    if (el.name !== 'Date Submitted' && el.type === 'text') {
-      inputFieldCollectionName[el.name] = {
-        value: '',
-        name: el.name,
+export function formatingFields(fields, FILTERS) {
+  return fields.map(field => {
+    if (field.name === 'Date Submitted') {
+      return {
+        ...field,
+        type: 'date',
+        condition: {
+          type: FILTERS.date.typesCondition[0],
+          value: {
+            from: '',
+            to: '',
+          },
+        },
       }
-      return true
+    }
+    return {
+      ...field,
+      condition: {
+        type: FILTERS[field.type].typesCondition[0],
+        value: '',
+      },
     }
   })
-  return inputFieldCollectionName
 }
 
 export function formattingDate(date) {

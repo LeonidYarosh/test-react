@@ -1,41 +1,63 @@
 import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
+import update from 'react-addons-update'
+import _ from 'lodash'
+
+export const conditions = [
+  'equals',
+  'contain',
+  'notEquals',
+]
+
+export function textFilter(condition, items, name) {
+  return items.filter(item => {
+    const inputValue = condition.value.toLowerCase()
+    const itemValue = item[name].toLowerCase()
+    return _.includes(itemValue, inputValue)
+  })
+}
 
 export default class InputFilter extends Component {
-  state = {
-    value: '',
-  }
 
   static propTypes = {
     placeholderInput: PropTypes.string.isRequired,
-    changeInputFilter: PropTypes.func.isRequired,
-    resetFilterInput: PropTypes.func.isRequired,
-    filterData: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
+    condition: PropTypes.object.isRequired,
+    onChangeFilter: PropTypes.func.isRequired,
+    onApply: PropTypes.func.isRequired,
+    resetFilteredItems: PropTypes.func.isRequired,
   }
 
   changeInput = (e) => {
-    this.setState({
-      value: e.target.value,
-    }, this.props.changeInputFilter(e.target.value))
+    const {value} = e.target
+    const {condition} = this.props
+    const newCondition = update(condition, {
+      value: {$set: value},
+    })
+    this.props.onChangeFilter(newCondition)
   }
 
   reset = () => {
-    this.setState({
-      value: '',
-    }, this.props.resetFilterInput(this.props.name))
+    const {condition} = this.props
+    const newCondition = update(condition, {
+      value: {$set: ''},
+    })
+    this.props.resetFilteredItems()
+    this.props.onChangeFilter(newCondition)
   }
 
   handleInputKeyDown = (e) => {
-    if (e.keyCode === 13 && this.state.value !== '') {
-      this.props.filterData()
+    const {condition} = this.props
+    if (e.keyCode === 13 && condition.value !== '' ) {
+      this.props.onApply()
     }
   }
 
   render() {
     const {
       placeholderInput,
+      condition,
     } = this.props
+    const value = condition.value
 
     return (
       <div className="input-filter-box">
@@ -43,12 +65,12 @@ export default class InputFilter extends Component {
           type="text"
           className="input-filter"
           placeholder={placeholderInput}
-          value={this.state.value}
+          value={value}
           onChange={this.changeInput}
           onKeyDown={this.handleInputKeyDown}
         />
         <div
-          className={cx({'show-block': this.state.value !== ''}, 'delete-input-filter hide-block')}
+          className={cx({'show-block': value !== ''}, 'delete-input-filter hide-block')}
           onClick={this.reset}
         >&#10006;</div>
       </div>

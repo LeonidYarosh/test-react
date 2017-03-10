@@ -5,15 +5,15 @@ export default class SwitchConditionFilterDate extends Component {
 
   static propTypes = {
     conditions: PropTypes.array.isRequired,
-    handleChangeCondition: PropTypes.func,
-    activeConditionDate: PropTypes.string,
+    onChangeConditionType: PropTypes.func.isRequired,
+    activeCondition: PropTypes.string.isRequired,
   }
 
   render() {
     const {
       conditions,
-      handleChangeCondition,
-      activeConditionDate,
+      onChangeConditionType,
+      activeCondition,
     } = this.props
     return (
       <div className="conditions-filter-date">
@@ -21,9 +21,9 @@ export default class SwitchConditionFilterDate extends Component {
         {
           conditions.map((item, i) => {
             return <div
-              className={cx({'active-condition': item === activeConditionDate}, 'item-condition')}
+              className={cx({'active-condition': item === activeCondition}, 'item-condition')}
               key={i}
-              onClick={ () => handleChangeCondition(item) }
+              onClick={ () => onChangeConditionType(item) }
             >
               {item}
             </div>
