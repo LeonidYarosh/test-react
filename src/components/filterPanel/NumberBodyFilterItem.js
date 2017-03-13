@@ -3,12 +3,13 @@ import cx from 'classnames'
 import update from 'react-addons-update'
 import _ from 'lodash'
 import SwitchConditionFilter from './SwitchConditionFilter'
+import InputFilter from './InputFilter'
 
 export const conditions = [
   'equals',
   'notEquals',
   'less',
-  'better',
+  'greater',
 ]
 
 function switchCoditionFilterNumber(condition, numberItem) {
@@ -21,7 +22,7 @@ function switchCoditionFilterNumber(condition, numberItem) {
     case 'less': {
       return numberItem < numberFilter
     }
-    case 'better': {
+    case 'greater': {
       return numberItem > numberFilter
     }
     case 'notEquals': {
@@ -34,7 +35,6 @@ function switchCoditionFilterNumber(condition, numberItem) {
 }
 
 export function numberFilter(condition, items, name) {
-  console.log(condition, items, name)
   return items.filter(item => {
     const numberItem = item[name]
     return switchCoditionFilterNumber(condition, numberItem)
@@ -52,12 +52,15 @@ export default class NumberBodyItemFilter extends Component {
 
   changeInput = (e) => {
     const {value} = e.target
-    if (!isNaN(_.parseInt(value)) || value === '') {
+    if (!isNaN(_.parseInt(value))) {
       const {condition} = this.props
       const newCondition = update(condition, {
-        value: {$set: value === '' ? '' : _.parseInt(value)},
+        value: {$set: _.parseInt(value)},
       })
       this.props.onChangeFilter(newCondition)
+    }
+    if (value === '') {
+      this.reset()
     }
   }
 
@@ -98,18 +101,14 @@ export default class NumberBodyItemFilter extends Component {
           onChangeConditionType={this.onChangeConditionType}
           activeCondition={activeConditionDate}
         />
-        <input
-          type="text"
-          className="input-filter"
+        <InputFilter
           placeholder={'Only numbers'}
           value={value}
           onChange={this.changeInput}
           onKeyDown={this.handleInputKeyDown}
+          reset={this.reset}
+          classNameReset={cx({'show-block': value !== ''})}
         />
-        <div
-          className={cx({'show-block': value !== ''}, 'delete-input-filter hide-block')}
-          onClick={this.reset}
-        >&#10006;</div>
       </div>
     )
   }

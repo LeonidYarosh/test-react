@@ -171,14 +171,19 @@ export default class DateBodyItemFilter extends Component {
     const {condition} = this.props
     const {value, name} = e.target
     const momentDay = moment(value, 'L', true)
-    if (momentDay.isValid()) {
-      if (condition.type === 'between' &&
-        name === 'to' && moment(momentDay).isBefore(condition.value.from)) {
-        alert('Second date less first')
-      }
-      this.daypicker.showMonth(momentDay.toDate())
+    if (value === '') {
+      this.reset()
     }
-    this.updateCondition(value, name)
+    else {
+      if (momentDay.isValid()) {
+        if (condition.type === 'between' &&
+          name === 'to' && moment(momentDay).isBefore(condition.value.from)) {
+          alert('Second date less first')
+        }
+        this.daypicker.showMonth(momentDay.toDate())
+      }
+      this.updateCondition(value, name)
+    }
   }
 
   onKeyDownInput = (e) => {
@@ -281,21 +286,22 @@ export default class DateBodyItemFilter extends Component {
         { (showOverlay || showOverlayToFilter) &&
         <div className="date-picker-filter">
           <div className="calendar-box">
-              <DayPicker
-                className="Range"
-                ref={ (el) => {
-                  this.daypicker = el
-                } }
-                initialMonth={ selectedDay || undefined }
-                selectedDays={ selectedDays }
-                disabledDays={ betweenCondition ? {before: from} : undefined}
-                modifiers={ betweenCondition ? {
-                  start: from,
-                  end: to,
-                } : undefined }
-                onDayClick={ this.onClickDay }
-                onDayMouseEnter={ betweenCondition ? this.handleDayMouseEnter : undefined }
-              />
+            <DayPicker
+              className="Range"
+              ref={ (el) => {
+                this.daypicker = el
+              } }
+              initialMonth={ selectedDay || undefined }
+              selectedDays={ selectedDays }
+              disabledDays={ betweenCondition ? {before: from} : undefined}
+              modifiers={ betweenCondition ?
+              {
+                start: from,
+                end: to,
+              } : undefined }
+              onDayClick={ this.onClickDay }
+              onDayMouseEnter={ betweenCondition ? this.handleDayMouseEnter : undefined }
+            />
           </div>
         </div>
         }

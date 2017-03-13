@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
 import update from 'react-addons-update'
 import _ from 'lodash'
+import InputFilter from './InputFilter'
 
 export const conditions = [
   'equals',
@@ -17,7 +18,7 @@ export function textFilter(condition, items, name) {
   })
 }
 
-export default class InputFilter extends Component {
+export default class TextBodyFilterItem extends Component {
 
   static propTypes = {
     placeholderInput: PropTypes.string.isRequired,
@@ -30,10 +31,15 @@ export default class InputFilter extends Component {
   changeInput = (e) => {
     const {value} = e.target
     const {condition} = this.props
-    const newCondition = update(condition, {
-      value: {$set: value},
-    })
-    this.props.onChangeFilter(newCondition)
+    if (value === '') {
+      this.reset()
+    }
+    else {
+      const newCondition = update(condition, {
+        value: {$set: value},
+      })
+      this.props.onChangeFilter(newCondition)
+    }
   }
 
   reset = () => {
@@ -61,18 +67,14 @@ export default class InputFilter extends Component {
 
     return (
       <div className="input-filter-box">
-        <input
-          type="text"
-          className="input-filter"
+        <InputFilter
           placeholder={placeholderInput}
           value={value}
           onChange={this.changeInput}
           onKeyDown={this.handleInputKeyDown}
+          reset={this.reset}
+          classNameReset={cx({'show-block': value !== ''})}
         />
-        <div
-          className={cx({'show-block': value !== ''}, 'delete-input-filter hide-block')}
-          onClick={this.reset}
-        >&#10006;</div>
       </div>
     )
   }
