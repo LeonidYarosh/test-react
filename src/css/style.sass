@@ -147,7 +147,7 @@ body
   height: 10px
   position: absolute
   top: 8px
-  right: 42px
+  right: 27px
 .delete-input-filter-between
   right: 10px
 .ReactVirtualized__Table__row
@@ -158,18 +158,24 @@ body
   padding: 5px
 .conditions-filter-date
   position: relative
-  height: 36px
+  min-height: 36px
   padding: 5px
   font-size: 12px
+  &:after
+    content: ''
+    clear: both
+    display: block
   .item-condition
-    margin: 14px 2px 8px
-    padding: 2px
+    margin: 10px 2px 0px
+    padding: 5px 2px
     float: left
     cursor: pointer
     color: #ab9bc6
     text-transform: uppercase
     font-weight: 700
     font-size: 8px
+    height: 9px
+    position: relative
   .active-condition
     background: #5C508A
     border-radius: 10px
@@ -179,7 +185,7 @@ body
   p
     float: left
     margin-top: 12px
-    margin-bottom: 12px
+    margin-bottom: 0
     color: #787471
 .Range
   .DayPicker-Day

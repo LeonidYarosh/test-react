@@ -30,6 +30,7 @@ export function formatingFields(fields, FILTERS) {
     }
     return {
       ...field,
+      type: field.name === 'ProjectMeterNumber_fld' ? 'number' : field.type,
       condition: {
         type: FILTERS[field.type].typesCondition[0],
         value: '',
