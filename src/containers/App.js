@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import FilterPanel from '../components/filterPanel/FilterPanel'
-import Content from '../components/Content'
+import Content from '../components/Content/Content'
 import itemsMock from '../mock/items.json'
 import fieldsMock from '../mock/fields.json'
 import {

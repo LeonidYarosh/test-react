@@ -11,14 +11,14 @@
       "name": "ProjectMeterNumber_fld",
       "caption": "Meter #",
       "type": "text",
-      "width": 15,
+      "width": 10,
       "isDefault": true
     },
     {
       "name": "CustGenMailingAddress_fld",
       "caption": "Address",
       "type": "text",
-      "width": 10,
+      "width": 15,
       "isDefault": true
     },
     {
