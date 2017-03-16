@@ -1,8 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
-import update from 'react-addons-update'
-import _ from 'lodash'
-import SwitchConditionFilter from '../Shared/SwitchConditionFilter'
+import SwitchFilterCondition from '../Shared/SwitchFilterCondition'
 import InputFilter from '../Shared/InputFilter'
 
 export const conditions = [
@@ -12,11 +10,9 @@ export const conditions = [
   'greater',
 ]
 
-function switchCoditionFilterNumber(condition, numberItem) {
-  const numberFilter = condition.value
-  switch (condition.type) {
+function switchCoditionFilterNumber(numberFilter, numberItem, type) {
+  switch (type) {
     case 'equals': {
-      console.log(numberItem === numberFilter)
       return numberItem === numberFilter
     }
     case 'less': {
@@ -37,7 +33,7 @@ function switchCoditionFilterNumber(condition, numberItem) {
 export function numberFilter(condition, items, name) {
   return items.filter(item => {
     const numberItem = item[name]
-    return switchCoditionFilterNumber(condition, numberItem)
+    return switchCoditionFilterNumber(condition.value, numberItem, condition.type)
   })
 }
 
@@ -50,63 +46,31 @@ export default class NumberBodyItemFilter extends Component {
     resetFilteredItems: PropTypes.func.isRequired,
   }
 
-  changeInput = (e) => {
-    const {value} = e.target
-    if (!isNaN(_.parseInt(value))) {
-      const {condition} = this.props
-      const newCondition = update(condition, {
-        value: {$set: _.parseInt(value)},
-      })
-      this.props.onChangeFilter(newCondition)
-    }
-    if (value === '') {
-      this.reset()
-    }
-  }
-
-  handleInputKeyDown = (e) => {
-    const {condition} = this.props
-    if (e.keyCode === 13 && condition.value !== '' ) {
-      this.props.onApply()
-    }
-  }
-
-  reset = () => {
-    const {condition} = this.props
-    const newCondition = update(condition, {
-      value: {$set: ''},
-    })
-    this.props.resetFilteredItems()
-    this.props.onChangeFilter(newCondition)
-  }
-
-  onChangeConditionType = (item) => {
-    const {condition} = this.props
-    const updatedCondition = update(condition, {
-      type: {$set: item},
-    })
-    this.props.onChangeFilter(updatedCondition)
-  }
-
   render() {
     const {
       condition,
+      onChangeFilter,
+      onApply,
+      resetFilteredItems,
     } = this.props
     const value = condition.value
     const activeConditionDate = condition.type
     return (
       <div className={cx('input-filter-box')}>
-        <SwitchConditionFilter
+        <SwitchFilterCondition
           conditions={conditions}
-          onChangeConditionType={this.onChangeConditionType}
+          condition={condition}
+          onChangeFilter={onChangeFilter}
           activeCondition={activeConditionDate}
         />
         <InputFilter
           placeholder={'Only numbers'}
           value={value}
-          onChange={this.changeInput}
-          onKeyDown={this.handleInputKeyDown}
-          reset={this.reset}
+          onApply={onApply}
+          onChangeFilter={onChangeFilter}
+          condition={condition}
+          resetFilteredItems={resetFilteredItems}
+          filterType="number"
           classNameReset={cx({'show-block': value !== ''})}
         />
       </div>

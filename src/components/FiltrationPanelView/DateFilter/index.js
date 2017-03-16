@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import moment from 'moment'
 import DayPicker, {DateUtils} from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
-import SwitchConditionFilter from '../Shared/SwitchConditionFilter'
+import SwitchFilterCondition from '../Shared/SwitchFilterCondition'
 import cx from 'classnames'
 import {formattingDate} from '../../../util/formatingDataContent'
 import update from 'react-addons-update'
@@ -198,14 +198,6 @@ export default class DateBodyItemFilter extends Component {
     }
   }
 
-  onChangeConditionType = (item) => {
-    const {condition} = this.props
-    const updatedCondition = update(condition, {
-      type: {$set: item},
-    })
-    this.props.onChangeFilter(updatedCondition)
-  }
-
   reset = () => {
     const {condition} = this.props
     const newCondition = update(condition, {
@@ -224,6 +216,7 @@ export default class DateBodyItemFilter extends Component {
   render() {
     const {
       condition,
+      onChangeFilter,
     } = this.props
     const fromInput = condition.value.from
     const toInput = condition.value.to
@@ -242,9 +235,10 @@ export default class DateBodyItemFilter extends Component {
 
     return (
       <div onMouseDown={ this.handleContainerMouseDown }>
-        <SwitchConditionFilter
+        <SwitchFilterCondition
           conditions={conditions}
-          onChangeConditionType={this.onChangeConditionType}
+          condition={condition}
+          onChangeFilter={onChangeFilter}
           activeCondition={activeConditionDate}
         />
         <div className={cx('input-and-clear-filter')}>
