@@ -1,0 +1,73 @@
+.input-date-between
+  display: inline-block
+  width: 86px
+  margin-left: 6px
+  height: 20px
+  background: #E8EAED
+  border: 0
+  padding: 3px
+  border-radius: 5px
+
+.delete-input-filter-between
+  right: 10px
+
+.date-picker-filter
+  position: absolute
+  height: 264px
+  display: block
+
+.calendar-box
+  position: absolute
+  z-index: 9
+  width: 230px
+  margin-left: 5px
+  margin-bottom: 50px
+  background: #E8EAED
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .15)
+  .DayPicker-Day
+    border: none
+    padding: 0.4rem
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)
+    background: #5C508A
+  .DayPicker-Day--start:not(.DayPicker-Day--outside):before
+    border-bottom-left-radius: 0
+  .DayPicker-Day--end:not(.DayPicker-Day--outside):after
+    border-top-right-radius: 0
+  .DayPicker-Day--start:not(.DayPicker-Day--outside):before,
+  .DayPicker-Day--end:not(.DayPicker-Day--outside):after
+    background: #5C508A
+
+.Range
+  .DayPicker-Day
+    outline: none
+  .DayPicker-Day--disabled
+    background-color: white
+    color: lightgray
+  .DayPicker-Day:not(.DayPicker-Day--outside):not(.DayPicker-Day--selected):hover
+    background-color: #EAEAEA
+    color: #555
+
+.DayPicker-Day--start, .DayPicker-Day--end
+  position: relative
+
+.DayPicker-Day--start:not(.DayPicker-Day--outside):before
+  position: absolute
+  top: 0
+  bottom: 0
+  left: -5px
+  width: 5px
+  content: ''
+  background-color: yellowgreen
+  border-top-left-radius: 10px
+  border-bottom-left-radius: 10px
+
+.DayPicker-Day--end:not(.DayPicker-Day--outside):after
+  position: absolute
+  top: 0
+  bottom: 0
+  right: -5px
+  width: 5px
+  content: ''
+  background-color: yellowgreen
+  border-top-right-radius: 10px
+  border-bottom-right-radius: 10px

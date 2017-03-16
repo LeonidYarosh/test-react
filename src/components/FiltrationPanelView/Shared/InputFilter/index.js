@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react'
+import cx from 'classnames'
+import './style.sass'
 
 export default class InputFilter extends Component {
 
@@ -6,7 +8,7 @@ export default class InputFilter extends Component {
     placeholder: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.number
+      PropTypes.number,
     ]),
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func.isRequired,
@@ -25,17 +27,17 @@ export default class InputFilter extends Component {
     } = this.props
 
     return (
-      <div className="input-and-clear-filter">
+      <div className={cx('input-and-clear-filter')}>
         <input
           type="text"
-          className="input-filter"
+          className={cx('input-filter')}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
           onKeyDown={onKeyDown}
         />
         <div
-          className={classNameReset + ' delete-input-filter hide-block'}
+          className={cx(classNameReset + ' delete-input-filter hide-block')}
           onClick={reset}
         >&#10006;</div>
       </div>

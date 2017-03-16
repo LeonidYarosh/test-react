@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
+import './style.sass'
 
 export default class SwitchConditionFilterDate extends Component {
 
@@ -16,7 +17,7 @@ export default class SwitchConditionFilterDate extends Component {
       activeCondition,
     } = this.props
     return (
-      <div className="conditions-filter-date">
+      <div className={cx('conditions-filter-date')}>
         <p>Conditions:</p>
         {
           conditions.map((item, i) => {

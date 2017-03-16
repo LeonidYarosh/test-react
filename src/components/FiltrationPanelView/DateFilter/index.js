@@ -2,10 +2,12 @@ import React, {Component, PropTypes} from 'react'
 import moment from 'moment'
 import DayPicker, {DateUtils} from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
-import SwitchConditionFilter from './SwitchConditionFilter'
+import SwitchConditionFilter from '../Shared/SwitchConditionFilter'
 import cx from 'classnames'
-import {formattingDate} from '../../util/formatingDataContent'
+import {formattingDate} from '../../../util/formatingDataContent'
 import update from 'react-addons-update'
+import '../Shared/InputFilter/style.sass'
+import './style.sass'
 
 export const conditions = [
   'equals',
@@ -178,6 +180,7 @@ export default class DateBodyItemFilter extends Component {
       if (momentDay.isValid()) {
         if (condition.type === 'between' &&
           name === 'to' && moment(momentDay).isBefore(condition.value.from)) {
+          /* eslint-disable */
           alert('Second date less first')
         }
         this.daypicker.showMonth(momentDay.toDate())
@@ -244,7 +247,7 @@ export default class DateBodyItemFilter extends Component {
           onChangeConditionType={this.onChangeConditionType}
           activeCondition={activeConditionDate}
         />
-        <div className="input-and-clear-filter">
+        <div className={cx('input-and-clear-filter')}>
           <input
             type="text"
             name="from"
@@ -254,7 +257,7 @@ export default class DateBodyItemFilter extends Component {
             placeholder="DD/MM/YYYY"
             value={ fromInput }
             onChange={e => this.onChangeInput(e, 'from')}
-            className={cx({'input-date-between': activeConditionDate === 'between'}, 'input-filter')}
+            className={cx({'input-date-between': betweenCondition}, 'input-filter')}
             onFocus={ this.onFocusInput }
             onBlur={ betweenCondition ? undefined : this.onBlurInput }
             onKeyDown={this.onKeyDownInput}
@@ -270,13 +273,13 @@ export default class DateBodyItemFilter extends Component {
             onChange={e => this.onChangeInput(e, 'to') }
             onFocus={ this.onFocusInput }
             onBlur={ this.onBlurInput }
-            className={cx({'hide-block': activeConditionDate !== 'between'}, 'input-date-between')}
+            className={cx({'hide-block': !betweenCondition}, 'input-date-between')}
             onKeyDown={this.onKeyDownInput}
           />
           <div
             className={cx(
               {'show-block': fromInput !== '' || toInput !== ''},
-              {'delete-input-filter-between': activeConditionDate === 'between'},
+              {'delete-input-filter-between': betweenCondition},
               'delete-input-filter hide-block')
             }
             onClick={this.reset}>
@@ -284,10 +287,10 @@ export default class DateBodyItemFilter extends Component {
           </div>
         </div>
         { (showOverlay || showOverlayToFilter) &&
-        <div className="date-picker-filter">
-          <div className="calendar-box">
+        <div className={cx('date-picker-filter')} >
+          <div className={cx('calendar-box')} >
             <DayPicker
-              className="Range"
+              className={cx('Range')}
               ref={ (el) => {
                 this.daypicker = el
               } }
@@ -298,7 +301,8 @@ export default class DateBodyItemFilter extends Component {
               {
                 start: from,
                 end: to,
-              } : undefined }
+              } :
+                undefined }
               onDayClick={ this.onClickDay }
               onDayMouseEnter={ betweenCondition ? this.handleDayMouseEnter : undefined }
             />

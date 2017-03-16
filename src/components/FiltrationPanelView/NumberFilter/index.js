@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
 import update from 'react-addons-update'
 import _ from 'lodash'
-import SwitchConditionFilter from './SwitchConditionFilter'
-import InputFilter from './InputFilter'
+import SwitchConditionFilter from '../Shared/SwitchConditionFilter'
+import InputFilter from '../Shared/InputFilter'
 
 export const conditions = [
   'equals',
@@ -95,7 +95,7 @@ export default class NumberBodyItemFilter extends Component {
     const value = condition.value
     const activeConditionDate = condition.type
     return (
-      <div className="input-filter-box">
+      <div className={cx('input-filter-box')}>
         <SwitchConditionFilter
           conditions={conditions}
           onChangeConditionType={this.onChangeConditionType}

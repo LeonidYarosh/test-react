@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
 import update from 'react-addons-update'
 import _ from 'lodash'
-import InputFilter from './InputFilter'
+import InputFilter from '../Shared/InputFilter'
 
 export const conditions = [
   'equals',
@@ -66,7 +66,7 @@ export default class TextBodyFilterItem extends Component {
     const value = condition.value
 
     return (
-      <div className="input-filter-box">
+      <div className={cx('input-filter-box')}>
         <InputFilter
           placeholder={placeholderInput}
           value={value}
