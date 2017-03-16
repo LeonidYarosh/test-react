@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import FilterPanel from '../components/FiltrationPanelView'
-import Content from '../components/Content'
+import Content from '../components/GridView'
 import itemsMock from '../mock/items.json'
 import fieldsMock from '../mock/fields.json'
 import {
