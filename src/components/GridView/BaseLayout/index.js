@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from 'react'
 import { Grid } from 'react-virtualized'
+import cx from 'classnames'
 import 'react-virtualized/styles.css'
+import './style.sass'
 
 export function cellLayout(classNameCell, key, style, text) {
   return (
     <div
-      className={classNameCell}
+      className={cx(classNameCell)}
       key={key}
       style={style}
     >
@@ -66,12 +68,12 @@ export default class GridLayout extends Component {
 
     return (
       <div
-        className={classNameDivGrid}
+        className={cx(classNameDivGrid)}
         style={styleDivGrid}
       >
         <Grid
           cellRenderer={cellRenderer}
-          className={classNameGrid}
+          className={cx(classNameGrid)}
           width={width}
           height={height}
           rowHeight={rowHeight}

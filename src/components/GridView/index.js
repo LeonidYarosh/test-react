@@ -5,8 +5,10 @@ import {
 } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
-import SidePanelGrids from './SidePanelGrids'
-import BodyColumnsGrids from './BodyColumnsGrids'
+import cx from 'classnames'
+import SidePanelGrids from './SidePanel'
+import BodyColumnsGrids from './Body'
+import './style.sass'
 
 class WrapperGridRow extends Component {
 
@@ -28,7 +30,7 @@ class WrapperGridRow extends Component {
       )
       return (
         <div
-          className="GridRow"
+          className={cx('GridRow')}
           style={{width}}
         >
           {GridsRow}
@@ -69,7 +71,7 @@ export default class Content extends Component {
     const columnWidthFirstColumn = fields.length ? fields[0].width * 10 : columnWidth
 
     return (
-      <div className="content">
+      <div className={cx('content')}>
         <AutoSizer>
           {({width, height}) =>
             <ScrollSync>

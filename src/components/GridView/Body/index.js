@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import GridLayout, {cellLayout} from './GridLayout'
+import GridLayout, {cellLayout} from '../BaseLayout'
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
+import cx from 'classnames'
+import './style.sass'
 
 export default class BodyColumnsGrids extends Component {
 
@@ -71,7 +73,7 @@ export default class BodyColumnsGrids extends Component {
     const rowCountCell = fields.length ? 1 : 0
 
     return (
-      <div className="GridColumn">
+      <div className={cx('GridColumn')}>
         <div>
           <GridLayout
             classNameDivGrid={classNameDivGrid}

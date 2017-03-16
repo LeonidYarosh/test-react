@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import GridLayout, {cellLayout} from './GridLayout'
+import GridLayout, {cellLayout} from '../BaseLayout'
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
 
 export default class SidePanelGrids extends Component {
