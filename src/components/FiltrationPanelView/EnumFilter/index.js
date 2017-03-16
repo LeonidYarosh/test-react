@@ -13,7 +13,7 @@ export default class EnumBodyItemFilter extends Component {
 
   render() {
     return (
-        <p>Enum</p>
+      <p>Enum</p>
     )
   }
 }

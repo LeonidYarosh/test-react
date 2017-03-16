@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
+import './style.sass'
 
 export default class HeaderItemFilter extends Component {
 
@@ -22,7 +23,7 @@ export default class HeaderItemFilter extends Component {
       >
         <div className={cx({ 'arrow-open': openedItemFilter}, 'arrow-filter')}></div>
         <p>{caption}</p>
-        <div className="reset-filter">Reset</div>
+        <div className={cx('reset-filter')}>Reset</div>
       </div>
     )
   }

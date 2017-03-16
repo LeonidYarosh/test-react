@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import FilterPanel from '../components/filterPanel/FilterPanel'
+import FilterPanel from '../components/FiltrationPanelView'
 import Content from '../components/Content'
 import itemsMock from '../mock/items.json'
 import fieldsMock from '../mock/fields.json'
@@ -8,14 +8,10 @@ import {
   formatingFields,
 } from '../util/formatingDataContent'
 import update from 'react-addons-update'
-import {textFilter} from '../components/filterPanel/TextBodyFilterItem'
-import {dateFilter} from '../components/filterPanel/DateBodyFilterItem'
-import {enumFilter} from '../components/filterPanel/EnumBodyFilterItem'
-import {numberFilter} from '../components/filterPanel/NumberBodyFilterItem'
-import {conditions as textConditions} from '../components/filterPanel/TextBodyFilterItem'
-import {conditions as dateConditions} from '../components/filterPanel/DateBodyFilterItem'
-import {conditions as numberConditions} from '../components/filterPanel/NumberBodyFilterItem'
-import {conditions as enumConditions} from '../components/filterPanel/EnumBodyFilterItem'
+import {textFilter, conditions as textConditions} from '../components/FiltrationPanelView/TextFilter'
+import {dateFilter, conditions as dateConditions} from '../components/FiltrationPanelView/DateFilter'
+import {enumFilter, conditions as numberConditions} from '../components/FiltrationPanelView/EnumFilter'
+import {numberFilter, conditions as enumConditions} from '../components/FiltrationPanelView/NumberFilter'
 
 const FILTERS = {
   text: {
