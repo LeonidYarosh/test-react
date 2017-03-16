@@ -13,6 +13,7 @@ export default class BodyColumnsGrids extends Component {
     height: PropTypes.number.isRequired,
     rowHeight: PropTypes.number.isRequired,
     overscanColumnCount: PropTypes.number,
+    scrollLeft: PropTypes.number.isRequired,
     onScroll: PropTypes.func.isRequired,
   }
 
@@ -60,6 +61,7 @@ export default class BodyColumnsGrids extends Component {
       height,
       rowHeight,
       overscanColumnCount,
+      scrollLeft,
       onScroll,
     } = this.props
 
@@ -83,6 +85,7 @@ export default class BodyColumnsGrids extends Component {
             rowCount={rowCountCell}
             columnCount={fields.length}
             overscanColumnCount={overscanColumnCount}
+            scrollLeft={scrollLeft}
           />
           <GridLayout
             classNameDivGrid={classNameDivGrid}
