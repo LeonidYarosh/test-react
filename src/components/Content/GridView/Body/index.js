@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import GridLayout, {cellLayout} from '../BaseLayout'
+import GridLayout, {RenderCell} from '../BaseLayout'
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
 import cx from 'classnames'
 import './style.sass'
@@ -23,19 +23,25 @@ export default class BodyColumnsGrids extends Component {
     fields: [],
     items: [],
     width: 0,
-    overscanColumnCount: 10,
   }
 
-  _renderBodyHeaderCell = ({columnIndex, key, style}) => {
+  renderBodyHeaderCell = ({columnIndex, key, style}) => {
     const {fields} = this.props
     if (fields[columnIndex] !== undefined && columnIndex && columnIndex !== fields.length - 1) {
       const header = fields[columnIndex].caption
-      return cellLayout('headerCell', key, style, header)
+      return (
+        <RenderCell
+          classNameCell='headerCell'
+          key={key}
+          style={style}
+          text={header}
+        />
+      )
     }
     return []
   }
 
-  _renderBodyCell = ({columnIndex, key, rowIndex, style}) => {
+  renderBodyCell = ({columnIndex, key, rowIndex, style}) => {
     const {
       items,
       fields,
@@ -44,7 +50,14 @@ export default class BodyColumnsGrids extends Component {
       fields[columnIndex] !== undefined && columnIndex && columnIndex !== fields.length - 1) {
       const nameFieldItem = fields[columnIndex].name
       const fieldItem = items[rowIndex][nameFieldItem]
-      return cellLayout('cell', key, style, fieldItem)
+      return (
+        <RenderCell
+          classNameCell='cell'
+          key={key}
+          style={style}
+          text={fieldItem}
+        />
+      )
     }
   }
 
@@ -67,7 +80,7 @@ export default class BodyColumnsGrids extends Component {
       onScroll,
     } = this.props
 
-    const classNameDivGrid = 'GridBodyDiv'
+    const classNameWrapperGrid = 'GridBodyDiv'
     const classNameGridHeader = 'HeaderGrid'
     const classNameGridColumn = 'BodyGrid'
     const rowCountCell = fields.length ? 1 : 0
@@ -76,9 +89,9 @@ export default class BodyColumnsGrids extends Component {
       <div className={cx('GridColumn')}>
         <div>
           <GridLayout
-            classNameDivGrid={classNameDivGrid}
-            styleDivGrid={styleBodyHeader}
-            cellRenderer={this._renderBodyHeaderCell}
+            classNameWrapperGrid={classNameWrapperGrid}
+            styleWrapperGrid={styleBodyHeader}
+            cellRenderer={this.renderBodyHeaderCell}
             classNameGrid={classNameGridHeader}
             width={width - scrollbarSize()}
             height={rowHeight}
@@ -90,9 +103,9 @@ export default class BodyColumnsGrids extends Component {
             scrollLeft={scrollLeft}
           />
           <GridLayout
-            classNameDivGrid={classNameDivGrid}
-            styleDivGrid={styleBodyColumn}
-            cellRenderer={this._renderBodyCell}
+            classNameWrapperGrid={classNameWrapperGrid}
+            styleWrapperGrid={styleBodyColumn}
+            cellRenderer={this.renderBodyCell}
             classNameGrid={classNameGridColumn}
             width={width}
             height={height - rowHeight}

@@ -4,23 +4,31 @@ import cx from 'classnames'
 import 'react-virtualized/styles.css'
 import './style.sass'
 
-export function cellLayout(classNameCell, key, style, text) {
+export function RenderCell({classNameCell, style, text = '---'}) {
   return (
     <div
       className={cx(classNameCell)}
-      key={key}
       style={style}
     >
-      {text || '---'}
+      {text}
     </div>
   )
+}
+
+RenderCell.propTypes = {
+  classNameCell: PropTypes.string.isRequired,
+  style: PropTypes.object.isRequired,
+  text: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 }
 
 export default class GridLayout extends Component {
 
   static propTypes = {
-    classNameDivGrid: PropTypes.string.isRequired,
-    styleDivGrid: PropTypes.object.isRequired,
+    classNameWrapperGrid: PropTypes.string.isRequired,
+    styleWrapperGrid: PropTypes.object.isRequired,
     cellRenderer: PropTypes.func.isRequired,
     classNameGrid: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
@@ -40,51 +48,25 @@ export default class GridLayout extends Component {
   }
 
   static defaultProps = {
-    overscanColumnCount: 10,
-    overscanRowCount: 10,
     scrollTop: 0,
     scrollLeft: 0,
-    onScroll: undefined,
   }
 
   render() {
     const {
-      classNameDivGrid,
-      styleDivGrid,
-      cellRenderer,
+      classNameWrapperGrid,
+      styleWrapperGrid,
       classNameGrid,
-      width,
-      height,
-      rowHeight,
-      columnWidth,
-      rowCount,
-      columnCount,
-      overscanColumnCount,
-      overscanRowCount,
-      scrollTop,
-      scrollLeft,
-      onScroll,
     } = this.props
 
     return (
       <div
-        className={cx(classNameDivGrid)}
-        style={styleDivGrid}
+        className={cx(classNameWrapperGrid)}
+        style={styleWrapperGrid}
       >
         <Grid
-          cellRenderer={cellRenderer}
+          {...this.props}
           className={cx(classNameGrid)}
-          width={width}
-          height={height}
-          rowHeight={rowHeight}
-          columnWidth={columnWidth}
-          rowCount={ rowCount}
-          columnCount={columnCount}
-          overscanColumnCount={overscanColumnCount}
-          overscanRowCount={overscanRowCount}
-          scrollTop={scrollTop}
-          scrollLeft={scrollLeft}
-          onScroll={onScroll}
         />
       </div>
     )

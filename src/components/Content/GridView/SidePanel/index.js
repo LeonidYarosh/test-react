@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import GridLayout, {cellLayout} from '../BaseLayout'
+import GridLayout, {RenderCell} from '../BaseLayout'
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
 
 export default class SidePanelGrids extends Component {
@@ -23,23 +23,27 @@ export default class SidePanelGrids extends Component {
     widthSide: 0,
     heightCell: 0,
     heightSide: 0,
-    rowHeight: 0,
-    overscanColumnCount: 10,
-    overscanRowCount: 10,
     scrollTop: 10,
   }
 
-  _renderHeaderCell = ({key, style}) => {
+  renderHeaderCell = ({key, style}) => {
     const {fields, orientation} = this.props
     const index = orientation === 'left' ? 0 : fields.length - 1
     if (fields[index] !== undefined) {
       const header = fields[index].caption
-      return cellLayout('headerCell', key, style, header)
+      return (
+        <RenderCell
+          classNameCell='headerCell'
+          key={key}
+          style={style}
+          text={header}
+        />
+      )
     }
     return []
   }
 
-  _renderSideCell = ({rowIndex, key, style}) => {
+  renderSideCell = ({rowIndex, key, style}) => {
     const {
       items,
       fields,
@@ -49,7 +53,14 @@ export default class SidePanelGrids extends Component {
     if (items[rowIndex] !== undefined && fields[columnIndex] !== undefined) {
       const nameFieldItem = fields[columnIndex].name
       const fieldItem = items[rowIndex][nameFieldItem]
-      return cellLayout('cell', key, style, fieldItem)
+      return (
+        <RenderCell
+          classNameCell='cell'
+          key={key}
+          style={style}
+          text={fieldItem}
+        />
+      )
     }
     return []
   }
@@ -70,37 +81,26 @@ export default class SidePanelGrids extends Component {
 
     const classNameGridCell = 'HeaderGrid'
     const classNameGridSide = 'LeftSideGrid'
-    const classNameDivGrid = 'SideGridContainer'
+    const classNameWrapperGrid = 'SideGridContainer'
     const columnCount = 1
-    const styleHeaderLeft = {
-      left: 0,
+    const styleHeader = {
+      [orientation]: 0,
       top: 0,
     }
-    const styleSideLeft = {
-      left: 0,
+    const styleSide = {
+      [orientation]: orientation === 'right' ? scrollbarSize() : 0,
       top: rowHeight,
     }
-    const styleHeaderRight = {
-      right: 0,
-      top: 0,
-    }
-    const styleSideRight = {
-      right: 0 + scrollbarSize(),
-      top: rowHeight,
-    }
-
-    const styleHeader = orientation === 'left' ? styleHeaderLeft : styleHeaderRight
-    const styleSide = orientation === 'left' ? styleSideLeft : styleSideRight
-    const widthCell = orientation === 'left' ? widthSide : widthSide + scrollbarSize()
+    const widthCell = orientation === 'right' ? widthSide + scrollbarSize() : widthSide
     const rowCountCell = fields.length ? 1 : 0
     const rowCountSide = items.length
 
     return (
       <div>
         <GridLayout
-          classNameDivGrid={classNameDivGrid}
-          styleDivGrid={styleHeader}
-          cellRenderer={this._renderHeaderCell}
+          classNameWrapperGrid={classNameWrapperGrid}
+          styleWrapperGrid={styleHeader}
+          cellRenderer={this.renderHeaderCell}
           classNameGrid={classNameGridCell}
           width={widthCell}
           height={heightCell}
@@ -110,9 +110,9 @@ export default class SidePanelGrids extends Component {
           columnCount={columnCount}
         />
         <GridLayout
-          classNameDivGrid={classNameDivGrid}
-          styleDivGrid={styleSide}
-          cellRenderer={this._renderSideCell}
+          classNameWrapperGrid={classNameWrapperGrid}
+          styleWrapperGrid={styleSide}
+          cellRenderer={this.renderSideCell}
           classNameGrid={classNameGridSide}
           width={widthSide}
           height={heightSide}

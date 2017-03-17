@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
 import FilterPanel from '../components/filterPanel/FilterPanel'
-import Content from '../components/GridView'
+import Content from '../components/Content'
 import itemsMock from '../mock/items.json'
 import fieldsMock from '../mock/fields.json'
-import {
-  formatingItems,
-  formatingFields,
-} from '../util/formatingDataContent'
+import {formatingItems, formatingFields} from '../util/formatingDataContent'
 import update from 'react-addons-update'
 import {textFilter} from '../components/filterPanel/TextBodyFilterItem'
 import {dateFilter} from '../components/filterPanel/DateBodyFilterItem'
