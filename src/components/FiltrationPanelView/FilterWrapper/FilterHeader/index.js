@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
 import './style.sass'
 
-export default class HeaderItemFilter extends Component {
+export default class FilterHeader extends Component {
 
   static propTypes = {
     caption: PropTypes.string,

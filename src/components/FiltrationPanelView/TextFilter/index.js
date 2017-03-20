@@ -10,7 +10,7 @@ export const conditions = [
   'notContain',
 ]
 
-function switchCoditionFilterText(inputValue, itemValue, type) {
+function filteringByCondition(inputValue, itemValue, type) {
   switch (type) {
     case 'equals': {
       return inputValue === itemValue
@@ -27,22 +27,25 @@ function switchCoditionFilterText(inputValue, itemValue, type) {
   }
 }
 
-export function textFilter(condition, items, name) {
+export function FiltrationFunction(condition, items, name) {
   return items.filter(item => {
     const inputValue = condition.value.toLowerCase()
     const itemValue = item[name].toLowerCase()
-    return switchCoditionFilterText(inputValue, itemValue, condition.type)
+    return filteringByCondition(inputValue, itemValue, condition.type)
   })
 }
 
-export default class TextBodyFilterItem extends Component {
+export default class TextFilter extends Component {
 
   static propTypes = {
     placeholderInput: PropTypes.string.isRequired,
     condition: PropTypes.object.isRequired,
     onChangeFilter: PropTypes.func.isRequired,
     onApply: PropTypes.func.isRequired,
-    resetFilteredItems: PropTypes.func.isRequired,
+  }
+
+  validationValue = (value) => {
+    return value
   }
 
   render() {
@@ -51,7 +54,6 @@ export default class TextBodyFilterItem extends Component {
       condition,
       onChangeFilter,
       onApply,
-      resetFilteredItems,
     } = this.props
     const value = condition.value
     const activeConditionDate = condition.type
@@ -69,9 +71,9 @@ export default class TextBodyFilterItem extends Component {
           onApply={onApply}
           onChangeFilter={onChangeFilter}
           condition={condition}
-          resetFilteredItems={resetFilteredItems}
           filterType="text"
           classNameReset={cx({'show-block': value !== ''})}
+          validationValue = {this.validationValue}
         />
       </div>
     )

@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react'
-import HeaderItemFilter from './HeaderItemFilter'
+import FilterHeader from './FilterHeader'
 import cx from 'classnames'
 import './style.sass'
 
-export default class ItemFilter extends Component {
+export default class FilterWrapper extends Component {
 
   state = {
     openedItemFilter: false,
@@ -24,14 +24,15 @@ export default class ItemFilter extends Component {
     const {
       caption,
     } = this.props
+
     return (
       <div className={cx('group-filter')}>
-        <HeaderItemFilter
+        <FilterHeader
           caption={caption}
           openItemFilter={this.openItemFilter}
           openedItemFilter={this.state.openedItemFilter}
         />
-        <div className={cx({ 'show-block': this.state.openedItemFilter}, 'body-item-filter')}>
+        <div className={cx({'show-block': this.state.openedItemFilter}, 'body-item-filter')}>
           {this.props.children}
         </div>
       </div>

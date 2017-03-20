@@ -10,7 +10,7 @@ export const conditions = [
   'greater',
 ]
 
-function switchCoditionFilterNumber(numberFilter, numberItem, type) {
+function filteringByCondition(numberFilter, numberItem, type) {
   switch (type) {
     case 'equals': {
       return numberItem === numberFilter
@@ -30,20 +30,23 @@ function switchCoditionFilterNumber(numberFilter, numberItem, type) {
   }
 }
 
-export function numberFilter(condition, items, name) {
+export function FiltrationFunction(condition, items, name) {
   return items.filter(item => {
     const numberItem = item[name]
-    return switchCoditionFilterNumber(condition.value, numberItem, condition.type)
+    return filteringByCondition(condition.value, numberItem, condition.type)
   })
 }
 
-export default class NumberBodyItemFilter extends Component {
+export default class NumberFilter extends Component {
 
   static propTypes = {
     condition: PropTypes.object.isRequired,
     onChangeFilter: PropTypes.func.isRequired,
     onApply: PropTypes.func.isRequired,
-    resetFilteredItems: PropTypes.func.isRequired,
+  }
+
+  validationValue = (value) => {
+    return !isNaN(_.parseInt(value)) ? _.parseInt(value) : false
   }
 
   render() {
@@ -51,7 +54,6 @@ export default class NumberBodyItemFilter extends Component {
       condition,
       onChangeFilter,
       onApply,
-      resetFilteredItems,
     } = this.props
     const value = condition.value
     const activeConditionDate = condition.type
@@ -69,9 +71,9 @@ export default class NumberBodyItemFilter extends Component {
           onApply={onApply}
           onChangeFilter={onChangeFilter}
           condition={condition}
-          resetFilteredItems={resetFilteredItems}
           filterType="number"
           classNameReset={cx({'show-block': value !== ''})}
+          validationValue = {this.validationValue}
         />
       </div>
     )

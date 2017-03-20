@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import cx from 'classnames'
-import _ from 'lodash'
 import update from 'react-addons-update'
 import './style.sass'
 
@@ -16,16 +15,16 @@ export default class InputFilter extends Component {
     classNameReset: PropTypes.string.isRequired,
     onChangeFilter: PropTypes.func.isRequired,
     condition: PropTypes.object.isRequired,
-    resetFilteredItems: PropTypes.func.isRequired,
-    filterType: PropTypes.string.isRequired,
+    validationValue: PropTypes.func.isRequired,
   }
 
   onChange = (e) => {
     const {value} = e.target
-    const {filterType} = this.props
-    if (filterType === 'text' || !isNaN(_.parseInt(value))) {
+    const {validationValue} = this.props
+    const newValue = validationValue(value)
+
+    if (newValue) {
       const {condition, onChangeFilter} = this.props
-      const newValue = filterType === 'number' ? _.parseInt(value) : value
       const newCondition = update(condition, {
         value: {$set: newValue},
       })
@@ -37,18 +36,17 @@ export default class InputFilter extends Component {
   }
 
   onKeyDown = (e) => {
-    const {condition, onApply} = this.props
-    if (e.keyCode === 13 && condition.value !== '' ) {
+    const {onApply} = this.props
+    if (e.keyCode === 13) {
       onApply()
     }
   }
 
   reset = () => {
-    const {condition, onChangeFilter, resetFilteredItems} = this.props
+    const {condition, onChangeFilter} = this.props
     const newCondition = update(condition, {
       value: {$set: ''},
     })
-    resetFilteredItems()
     onChangeFilter(newCondition)
   }
 

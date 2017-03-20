@@ -39,5 +39,5 @@ export function formatingFields(fields, FILTERS) {
 }
 
 export function formattingDate(date) {
-  return moment(date).format('L')
+  return moment(date, moment.ISO_8601).format('YYYY-MM-DD')
 }
