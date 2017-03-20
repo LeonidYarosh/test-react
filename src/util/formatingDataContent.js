@@ -30,7 +30,6 @@ export function formatingFields(fields, FILTERS) {
     }
     return {
       ...field,
-      type: field.name === 'ProjectMeterNumber_fld' ? 'number' : field.type,
       condition: {
         type: FILTERS[field.type].typesCondition[0],
         value: '',
@@ -40,5 +39,5 @@ export function formatingFields(fields, FILTERS) {
 }
 
 export function formattingDate(date) {
-  return moment(date).format('L')
+  return moment(date, moment.ISO_8601).format('YYYY-MM-DD')
 }

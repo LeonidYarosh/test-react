@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from 'react'
-import ItemFilter from './ItemFilter'
-import TextBodyItemFilter from './TextBodyFilterItem'
-import DateBodyItemFilter from './DateBodyFilterItem'
-import NumberBodyItemFilter from './NumberBodyFilterItem'
-import EnumBodyItemFilter from './EnumBodyFilterItem'
-import ApplyFilter from '../ApplyFilter'
+import ItemFilter from './FilterWrapper'
+import TextBodyItemFilter from './TextFilter'
+import DateBodyItemFilter from './DateFilter'
+import NumberBodyItemFilter from './NumberFilter'
+import EnumBodyItemFilter from './EnumFilter'
+import ApplyFilter from './Shared/ApplyFilter'
 import {Scrollbars} from 'react-custom-scrollbars'
+import cx from 'classnames'
+import './style.sass'
 
 const filterItemType = {
   text: TextBodyItemFilter,
@@ -40,9 +42,9 @@ export default class FilterPanel extends Component {
         autoHide
         universal={true}
         style={{width: 240}}
-        className='scroll-box'
+        className={cx('scroll-box')}
       >
-        <div className="filter-panel">
+        <div className={cx('filter-panel')}>
           {
             fields.map((field, i) => {
               const {caption, type} = field

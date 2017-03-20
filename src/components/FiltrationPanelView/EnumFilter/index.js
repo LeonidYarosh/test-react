@@ -5,15 +5,15 @@ export const conditions = [
   'notEquals',
 ]
 
-export function enumFilter(condition, items) {
+export function FiltrationFunction(condition, items) {
   console.log('enum', condition, items)
 }
 
-export default class EnumBodyItemFilter extends Component {
+export default class EnumFilter extends Component {
 
   render() {
     return (
-        <p>Enum</p>
+      <p>Enum</p>
     )
   }
 }

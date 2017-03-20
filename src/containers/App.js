@@ -1,18 +1,15 @@
 import React, {Component} from 'react'
-import FilterPanel from '../components/filterPanel/FilterPanel'
+import FilterPanel from '../components/FiltrationPanelView'
 import Content from '../components/Content'
 import itemsMock from '../mock/items.json'
 import fieldsMock from '../mock/fields.json'
 import {formatingItems, formatingFields} from '../util/formatingDataContent'
 import update from 'react-addons-update'
-import {textFilter} from '../components/filterPanel/TextBodyFilterItem'
-import {dateFilter} from '../components/filterPanel/DateBodyFilterItem'
-import {enumFilter} from '../components/filterPanel/EnumBodyFilterItem'
-import {numberFilter} from '../components/filterPanel/NumberBodyFilterItem'
-import {conditions as textConditions} from '../components/filterPanel/TextBodyFilterItem'
-import {conditions as dateConditions} from '../components/filterPanel/DateBodyFilterItem'
-import {conditions as numberConditions} from '../components/filterPanel/NumberBodyFilterItem'
-import {conditions as enumConditions} from '../components/filterPanel/EnumBodyFilterItem'
+import {FiltrationFunction as textFilter, conditions as textConditions} from '../components/FiltrationPanelView/TextFilter'
+import {FiltrationFunction as dateFilter, conditions as dateConditions} from '../components/FiltrationPanelView/DateFilter'
+import {FiltrationFunction as enumFilter, conditions as numberConditions} from '../components/FiltrationPanelView/EnumFilter'
+import {FiltrationFunction as numberFilter, conditions as enumConditions} from '../components/FiltrationPanelView/NumberFilter'
+import _ from 'lodash'
 
 const FILTERS = {
   text: {
@@ -40,15 +37,18 @@ export default class App extends Component {
     items: [],
     filteredItems: [],
     showApply: false,
+    storedFields: [],
   }
 
   reloadData = () => {
     const items = formatingItems(itemsMock.items)
     const fields = formatingFields(fieldsMock.fields, FILTERS)
+    const storedFields = [...fields]
     this.setState({
       items,
       filteredItems: items,
       fields,
+      storedFields,
     })
   }
 
@@ -56,24 +56,11 @@ export default class App extends Component {
     this.reloadData()
   }
 
-  checkValueForShowApply = (fields) => {
-    let showApply = false
-    fields.map(field => {
-      if (field.condition.value !== '' && field.type !== 'date') {
-        showApply = true
-      }
-      if (field.type === 'date' && (field.condition.value.from !== '' || field.condition.value.to !== '')) {
-        showApply = true
-      }
-    })
-    return showApply
-  }
-
   onChangeFilter = (index, condition) => {
     const fields = update(this.state.fields, {
       [index]: {condition: {$set: condition}},
     })
-    const showApply = this.checkValueForShowApply(fields)
+    const showApply = !_.isEqual(fields, this.state.storedFields)
     this.setState({
       fields,
       showApply,
@@ -101,14 +88,12 @@ export default class App extends Component {
 
   onApply = () => {
     const filteredItems = this.checkValueForStartFilterData()
+    const storedFields = [...this.state.fields]
     this.setState({
       filteredItems,
+      storedFields,
       showApply: false,
     })
-  }
-
-  resetFilteredItems = () => {
-    this.setState({filteredItems: this.state.items})
   }
 
   render() {
